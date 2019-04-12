@@ -1,3 +1,15 @@
+;; FILE: cards.lisp
+;; AUTHORS: Daniel Melody & Aidan Lavis
+;; ==========================================
+
+;; Explanation of card deck implementation
+;;  cards will have a value 1-52
+;;  spades will be 1-13
+;;  clubs will be 14-26
+;;  hearts will be 27-39
+;;  diamonds will be 40-52
+
+
 ;; Constants for suits
 (defconstant *spades* 0)
 (defconstant *clubs* 1)
@@ -56,7 +68,7 @@
 ;; PRINT-CARD
 ;; ------------------------------------------
 ;; INPUTS: CARD, a number (1-52) referring to a CARD in the deck
-;; OUTUTS: NIL (doesn't matter)
+;; OUTPUTS: NIL (doesn't matter)
 ;; SIDE EFFECTS: prints out the CARD->STRING value
 (defun print-card (card)
   (format t "~A" (card->string card)))
