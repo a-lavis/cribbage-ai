@@ -30,24 +30,33 @@
 ;; RANK-OF
 ;; ------------------------------------------
 ;; INPUTS: CARD, the value (1-52)
-;; OUTPUTS: a string containing the applicable RANK
+;; OUTPUTS: a number referring to the applicable RANK
 
 (defun rank-of (card)
-  (svref *rank-vec* (mod card 13)))
+  (mod card 13))
 
 
 ;; SUIT-OF
 ;; ------------------------------------------
 ;; INPUTS: CARD, the value (1-52)
-;; OUTPUTS: a string containing the applicable SUIT
+;; OUTPUTS: a number referring to the applicable SUIT
 
 (defun suit-of (card)
-  (svref *suit-vec* (floor (/ card 13))))
+  (floor (/ card 13)))
 
+;; CARD->STRING
+;; ------------------------------------------
+;; INPUTS: CARD, a number (1-52) referring to a CARD in the deck
+;; OUTPUTS: a string illustrating that CARD
 
 (defun card->string (card) ;; add verbose option? "ace of spades"
-  (format nil "~A~A" (rank-of card) (suit-of card)))
+  (format nil "~A~A" (svref *rank-vec* (rank-of card))
+                     (svref *suit-vec* (suit-of card))))
 
-
+;; PRINT-CARD
+;; ------------------------------------------
+;; INPUTS: CARD, a number (1-52) referring to a CARD in the deck
+;; OUTUTS: NIL (doesn't matter)
+;; SIDE EFFECTS: prints out the CARD->STRING value
 (defun print-card (card)
   (format t "~A" (card->string card)))
