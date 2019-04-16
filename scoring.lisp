@@ -8,7 +8,8 @@
 ;; --------------------------
 ;; HIS-HEELS, GO, FIFTEEN, PAIR, TRIPLE, QUADRUPLE, RUN, FLUSH, HIS-KNOBS
 
-;; for now using a pair to represent previous score and current score
+;; for now using a pair to represent a player's previous and current scores
+;;  previous score is FIRST, current score is SECOND in the PAIR
 
 
 ;; HIS-HEELS
@@ -38,6 +39,14 @@
 ;; OUTPUTS: the updated LAST-PLAYER's score (adds 1)
 ;; CONDITION: the TOP-CARD matches the CUT-SUIT
 
+(defun his-knobs (top-card cut-suit last-player)
+  ;; get LAST-PLAYER's current score
+  (let ((last-curr (second last-player)))
+    ;; if TOP-CARD == CUT-SUIT
+    (when (equal (suit-of top-card) cut-suit)
+      ;; add 1 to LAST-CURR
+      (+ last-curr 1))))
+
 
 ;; GO
 ;; ------------------------------------------
@@ -54,6 +63,13 @@
 ;;         LAST-PLAYER, the last player to place a CARD
 ;; OUTPUTS: the updated LAST-PLAYER's score (adds 2)
 ;; CONDITION: when the PILE-SUM reaches 15
+
+(defun fifteen (pile-sum last-player)
+  ;; get LAST-PLAYER's current score
+  (let ((last-curr (second last-player)))
+    ;; if PILE-SUM == 15
+    (when (equal pile-sum 15)
+      (+ last-curr 2))))
 
 
 ;; PAIR
