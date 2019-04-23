@@ -1,9 +1,11 @@
-# CMPU365 Final Project Authors: `Daniel Melody`, `Aidan Lavis`
+# CMPU365 Final Project
+
+*Authors*: Daniel Melody, Aidan Lavis
 
 ## The Project
 
 For this project, we have decided to implement a 2-player, 5-card version of
-cribbage playing to 61.  This is the simplest version of cribbage and is
+Cribbage playing to 61.  This is the simplest version of Cribbage and is
 preferred by beginners.  There are 6-card versions, as well as 3-player and
 4-player versions.
 
@@ -17,14 +19,14 @@ search algorithms.
 Cribbage requires a 52-card standard playing deck.  The current and previous
 scores of each player are tracked by a board which counts up to 121 for full
 games, but this simplified version will terminate after 61 points. The royal
-card values are all worth 10 points.  Aces count as 1 point, though.  
+card values are all worth 10 points.  Aces count as 1 point.  
 
 Cribbage is divided into three segments: Deal, Play, and Show.
 
 The Deal happens at the beginning of each round.  Typically, the players will
 draw for lowest card to determine who begins as the dealer.  We will forego this
-process and just designate one player as the dealer.Then each player is dealt their
-hand (5 cards).  From these five cards, each player selects
+process and just designate one player as the dealer.Then each player is dealt
+their hand (5 cards).  From these five cards, each player selects
 
 The Play happens each round w/ a new hand.  This segment starts w/ the
 non-dealer player (the pone) laying a card down.  The dealer follows, announcing
@@ -40,4 +42,4 @@ Opportunities).
 
 ### Scoring Opportunities
 
-Rules from https://cardgames.io/cribbage/#rules
+Rules from https://cardgames.io/Cribbage/#rules
