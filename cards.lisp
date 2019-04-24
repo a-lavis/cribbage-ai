@@ -80,4 +80,4 @@
 ;; OUTPUTS: a random card number
 
 (defun deal-card ()
-  (+ 1 (random 52))
+  (+ 1 (random 52)))
