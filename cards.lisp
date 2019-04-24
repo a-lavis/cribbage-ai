@@ -72,3 +72,12 @@
 ;; SIDE EFFECTS: prints out the CARD->STRING value
 (defun print-card (card)
   (format t "~A" (card->string card)))
+
+
+;; DEAL-CARD
+;; ------------------------------------------
+;; INPUTS: none
+;; OUTPUTS: a random card number
+
+(defun deal-card ()
+  (+ 1 (random 52))
