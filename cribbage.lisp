@@ -26,6 +26,19 @@
   (whose-dealer? *player-one*))
 
 
+;; PRINT-CRIBBAGE
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: none
+;; SIDE EFFECTS: printing the status of the game
+
+(defun print-cribbage (c str depth)
+  (declare (ignore depth))
+  (format t "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
+  (format t "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
+  (format t "Dealer: ~A~%" (cribbage-whose-dealer? c)))
+
+
 ;; TOGGLE-DEALER!
 ;; ------------------------------------------
 ;; INPUTS: C, a cribbage struct
