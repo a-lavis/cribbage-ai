@@ -38,7 +38,11 @@ Scoring Opportunities section).
 
 The Show starts after the Play has finished.  The players take back their cards
 and calculate all the different card combinations (covered in Scoring
-Opportunities).
+Opportunities).  It is important to note that cards can be reused when creating
+scoring combos.  First, the non-dealer's hand is evaluated, next the dealer's,
+and finally the crib.  The points scored by the crib are given to the dealer.
+This creates an advantage for the first dealer (made even larger by our shorter
+game).
 
 ### Scoring Opportunities
 
