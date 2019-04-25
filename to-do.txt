@@ -1,0 +1,6 @@
+Functions that have been called, but aren't written yet:
+
+- in-hand?    purpose: check whether a card being put into the crib
+                       is in the player's hand
+
+            
