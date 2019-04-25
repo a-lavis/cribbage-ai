@@ -71,7 +71,7 @@
 ;; OUTPUTS: NIL (doesn't matter)
 ;; SIDE EFFECTS: prints out the CARD->STRING value
 (defun print-card (card)
-  (format t "~A" (card->string card)))
+  (format t "~A  " (card->string card)))
 
 
 ;; DEAL-CARD
