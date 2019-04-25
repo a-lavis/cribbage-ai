@@ -24,9 +24,9 @@
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 0))
   (whose-dealer? *player-one*)
-  (plr-one-hand (vector 0 0 0 0 0))
-  (plr-two-hand (vector 0 0 0 0 0))
-  (crib (vector 0 0 0 0))
+  (plr-one-hand '())
+  (plr-two-hand '())
+  (crib '())
   cut)
 
 

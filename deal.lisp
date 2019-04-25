@@ -27,11 +27,11 @@
         ;; assign first five cards to PLR-ONE-HAND
         ((< counter 5)
           ;; set each index of P-ONE's vector
-          (setf (svref p-one counter) card))
+          (setf (cons card p-one)))
         ;; assign second five cards to PLR-TWO-HAND
         ((< counter 10)
           ;; set each index of P-TWO's vector
-          (setf (svref p-two (- counter 5)) card))
+          (setf (cons card p-two)))
         ;; assign last card to CUT
         (t
           (setf (cribbage-cut c) card)))
