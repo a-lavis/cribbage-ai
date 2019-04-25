@@ -90,7 +90,7 @@
                   ((not (member card card-bucket))
                     (acc-func (cons card card-bucket)))
                   ;; CARD is a MEMBER of CARD-BUCKET
-                  (#t
+                  (t
                     (acc-func card-bucket))))))
       ;; call ACC-FUNC w/ empty CARD-BUCKET
       (acc-func '())))
