@@ -24,8 +24,7 @@
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 0))
   (whose-dealer? *player-one*)
-  (plr-one-hand '())
-  (plr-two-hand '())
+  (plr-hands (vector '() '()))
   (crib '())
   cut)
 
@@ -66,19 +65,6 @@
 
 (defun switch (dlr)
   (- 1 dlr))
-
-
-;; PLAY-GAME
-;; ------------------------------------------
-;;  INPUTS: C, a Cribbage game
-;;  OUTPUTS:
-
-(defun play-game (c)
-    (while (not (game-over? c))
-      (deal c)  ;; completed
-      (build-crib c)
-      (play c)
-      (show c)))
 
 
 ;; GAME-OVER?
