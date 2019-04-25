@@ -23,7 +23,10 @@
 
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 0))
-  (whose-dealer? *player-one*))
+  (whose-dealer? *player-one*)
+  (plr-one-hand (vector 0 0 0 0 0))
+  (plr-two-hand (vector 0 0 0 0 0))
+  cut)
 
 
 ;; PRINT-CRIBBAGE
@@ -34,9 +37,12 @@
 
 (defun print-cribbage (c str depth)
   (declare (ignore depth))
-  (format t "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
-  (format t "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
-  (format t "Dealer: ~A~%" (cribbage-whose-dealer? c)))
+  (format str "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
+  (format str "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
+  (format str "Dealer: ~A~%" (cribbage-whose-dealer? c))
+  (format str "Player-One-Hand: ~A~%" (cribbage-plr-one-hand c))
+  (format str "Player-Two-Hand: ~A~%" (cribbage-plr-two-hand c))
+  (format str "Cut: ~A~%" (cribbage-cut c)))
 
 
 ;; TOGGLE-DEALER!
@@ -70,6 +76,44 @@
       (deal c)
       (play c)
       (show c)))
+
+
+;; DEAL
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: COUNTER, the counter used to address vector indexes (not used)
+;; SIDE EFFECTS: updates the hand vectors in C, ie. plr-one-hand, plr-two-hand
+
+(defun deal (c)
+  ;; generate cards for the ROUND
+  (let ((cards-dealt (generate-cards))
+        (p-one (cribbage-plr-one-hand c))
+        (p-two (cribbage-plr-two-hand c))
+        (counter 0))
+    (format t "dealt: ~A~%" cards-dealt)
+    ;; loop thru CARDS-DEALT
+    (dolist (card cards-dealt)
+      (format t "card: ~A~%" card)
+      (cond
+        ;; CARDS-DEALT is null, return COUNTER... useless really
+        ((null cards-dealt)
+          counter)
+        ;; assign first five cards to PLR-ONE-HAND
+        ((< counter 5)
+          ;; set each index of P-ONE's vector
+          (setf (svref p-one counter) card))
+        ;; assign second five cards to PLR-TWO-HAND
+        ((< counter 10)
+          ;; set each index of P-TWO's vector
+          (setf (svref p-two (- counter 5)) card))
+        ;; assign last card to CUT
+        (t
+          (setf (cribbage-cut c) card)))
+      ;; remove FIRST of CARDS-DEALT if NOT NIL
+      (when (not (null cards-dealt))
+        (remove card cards-dealt))
+      ;; increment COUNTER
+      (incf counter))))
 
 
 ;; GENERATE-CARDS
