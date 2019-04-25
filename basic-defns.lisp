@@ -13,6 +13,9 @@
 (defparameter *cribbage-files*
   (list "basic-defns"
         "cards"
+        "deal"
+        "play"
+        "show"
         "cribbage"
         "scoring"))
 
