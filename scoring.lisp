@@ -2,8 +2,6 @@
 ;; AUTHORS: Daniel Melody & Aidan Lavis
 ;; ==========================================
 
-;; a beginning attempt to sketch out the different scoring fxns
-
 ;; Methods in FILE
 ;; --------------------------
 ;; HIS-HEELS, GO, FIFTEEN, PAIR, TRIPLE, QUADRUPLE, RUN, FLUSH, HIS-KNOBS
@@ -22,11 +20,8 @@
 (defun his-heels (dealer-score cut)
   ;; get dealer's current SCORE
   (let ((dealer-curr (second dealer-score)))
-    ;; if CUT == any JACK
-    (when (or (equal cut (* *jack* *spades*))
-              (equal cut (* *jack* *clubs*))
-              (equal cut (* *jack* *hearts*))
-              (equal cut (* *jack* *diamonds*)))
+    ;; if CUT == JACK
+    (when (equal (rank-of cut) *jack*)
       ;; add 2 to DEALER-CURR
       (+ dealer-curr 2))))
 
@@ -104,6 +99,8 @@
 ;; OUTPUTS: the updated LAST-PLAYER's score (adds NUM-CARDS)
 ;; CONDITION: the last NUM-CARD's make have continuous
 ;;    rank (can be out of order)
+
+
 
 
 ;; FLUSH -- might not be in the pile    ************************************
