@@ -26,7 +26,7 @@
   (let ((plr-hand (svref (cribbage-plr-hands c) plr)))
 
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
-    (when (and check-legal? (not legal-play? plr-hand pile card))
+    (when (and check-legal? (not (legal-play? plr-hand pile card)))
       ;; print error message
       (format t "Illegal play! Potential issues: crib is full, card is
         not in your hand, you've already passed two cards to the crib.")
