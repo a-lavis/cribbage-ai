@@ -89,4 +89,7 @@
     ;; add CARD to CRIB
     (setf crib (cons card crib))
     ;; remove CARD from PLR-HAND
-    (remove card plr-hand)))
+    (setf plr-hand (remove card plr-hand))
+    ;; update CRIBBAGE FIELDS
+    (setf (cribbage-crib c) crib)
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand)))
