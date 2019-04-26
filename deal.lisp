@@ -83,7 +83,8 @@
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
     (when (and check-legal? (not legal-crib? plr-hand crib card))
       ;; print error message
-      (format t "Illegal move!")
+      (format t "Illegal play! Potential issues: crib is full, card is
+        not in your hand, you've already passed two cards to the crib.")
       (return-from hand-to-crib! nil))
 
     ;; add CARD to CRIB
