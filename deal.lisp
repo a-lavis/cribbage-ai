@@ -81,7 +81,7 @@
         (crib (cribbage-crib c)))
 
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
-    (when (and check-legal? (not in-hand? plr-hand card))
+    (when (and check-legal? (not legal-crib? plr-hand crib card))
       ;; print error message
       (format t "Illegal move!")
       (return-from hand-to-crib! nil))

@@ -67,6 +67,23 @@
   (- 1 dlr))
 
 
+;; LEGAL-CRIB?
+;; ------------------------------------------
+;; INPUTS: PLR-HAND, the player's hand
+;;         CRIB, the crib
+;;         CARD, the card the player wants to place in the crib
+;; OUTPUTS: a Boolean value, T if it's a legal card placement
+
+(defun legal-crib? (plr-hand crib card)
+  (and
+    ;; PLR-HAND length > 3
+    (> (length plr-hand) 3)
+    ;; CARD is in PLR-HAND
+    (member card plr-hand)
+    ;; CRIB length < 4
+    (< (length crib) 4)))
+
+
 ;; GAME-OVER?
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
