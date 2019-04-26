@@ -14,16 +14,16 @@
 ;; HAND-TO-PILE!
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
-;;         PILE, the pile of cards
 ;;         CHECK-LEGAL?, T or NIL
 ;;         CARD, a card (from one of the players' hands)
 ;;         PLR, the player (determines whose hand)
 ;; OUTPUTS: places CARD on PILE
 ;; SIDE-EFFECTS: removes CARD from player's hand
 
-(defun hand-to-pile! (c pile check-legal? card plr)
+(defun hand-to-pile! (c check-legal? card plr)
   ;; get player's hand
-  (let ((plr-hand (svref (cribbage-plr-hands c) plr)))
+  (let ((plr-hand (svref (cribbage-plr-hands c) plr))
+        (pile (cribbage-pile c)))
 
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
     (when (and check-legal? (not (legal-play? plr-hand pile card)))
@@ -33,6 +33,19 @@
       (return-from hand-to-pile! nil))
 
     ;; remove CARD from PLR-HAND
-    (remove card plr-hand)
+    (setf plr-hand (remove card plr-hand))
     ;; add CARD to PILE
-    (cons card pile)))
+    (setf pile (cons card pile))
+    ;; update CRIBBAGE fields
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand)
+    (setf (cribbage-pile c) pile)
+    (setf (cribbage-whose-dealer? c) (toggle-dealer! c))))
+
+
+;; PILE-SUM
+;; ------------------------------------------
+;; INPUTS: PILE, the card pile
+;; OUPUTS: the sum of all the card-values in PILE
+
+(defun pile-sum (pile)
+  (apply #'+ (mapcar #'card-value pile)))
