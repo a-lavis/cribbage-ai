@@ -26,6 +26,7 @@
   (whose-dealer? *player-one*)
   (plr-hands (vector '() '()))
   (crib '())
+  (pile '())
   cut)
 
 
@@ -44,8 +45,9 @@
     (svref (cribbage-plr-hands c) *player-one*))
   (format str "Player-Two-Hand: ~A~%"
     (svref (cribbage-plr-hands c) *player-two*))
-  (format str "Crib: ~A~%" (cribbage-crib c))
-  (format str "Cut: ~A~%" (cribbage-cut c)))
+  (format str "Cut: ~A   " (cribbage-cut c))
+  (format str "Crib: ~A   " (cribbage-crib c))
+  (format str "Pile: ~A~%" (cribbage-pile c)))
 
 
 ;; TOGGLE-DEALER!
@@ -84,6 +86,21 @@
     (member card plr-hand)
     ;; CRIB length < 4
     (< (length crib) 4)))
+
+
+;; LEGAL-PLAY?
+;; ------------------------------------------
+;; INPUTS: PLR-HAND, the player's hand
+;;         PILE, the card pile
+;;         CARD, the card the player wants to place on the pile
+;; OUTPUTS: a Boolean value, T if it's a legal card placement
+
+(defun legal-play? (plr-hand pile card)
+  (and
+    ;; CARD is in PLR-HAND
+    (member card plr-hand)
+    ;; sum of PILE would be <= 31
+    (<= (+ (card-value card) (pile-sum pile)) 31)))
 
 
 ;; GAME-OVER?
