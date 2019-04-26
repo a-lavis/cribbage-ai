@@ -13,31 +13,30 @@
 (defun deal (c)
   ;; generate cards for the ROUND
   (let ((cards-dealt (generate-cards))
-        (p-one (svref (cribbage-plr-hand c) *player-one*))
-        (p-two (svref (cribbage-plr-hand c) *player-two*))
-        (counter 0))
-    (format t "dealt: ~A~%" cards-dealt)
+        (p-one '())    ;; accumulator for plr-one hand
+        (p-two '())    ;; accumulator for plr-two hand
+        (counter 0))   ;; counter decides where (to whom) the card goes
     ;; loop thru CARDS-DEALT
     (dolist (card cards-dealt)
-      (format t "card: ~A~%" card)
       (cond
-        ;; CARDS-DEALT is null, return COUNTER... useless really
-        ((null cards-dealt)
-          counter)
         ;; assign first five cards to PLR-ONE-HAND
         ((< counter 5)
-          ;; set each index of P-ONE's vector
-          (setf (cons card p-one)))
+          ;; remove CARD from CARDS-DEALT
+          (setf cards-dealt (remove card cards-dealt))
+          ;; CONS CARD onto P-ONE
+          (setf p-one (cons card p-one)))
         ;; assign second five cards to PLR-TWO-HAND
         ((< counter 10)
-          ;; set each index of P-TWO's vector
-          (setf (cons card p-two)))
+          ;; remove CARD from CARDS-DEALT
+          (setf cards-dealt (remove card cards-dealt))
+          ;; CONS CARD onto P-TWO
+          (setf p-two (cons card p-two)))
         ;; assign last card to CUT
         (t
-          (setf (cribbage-cut c) card)))
-      ;; remove FIRST of CARDS-DEALT if NOT NIL
-      (when (not (null cards-dealt))
-        (remove card cards-dealt))
+          (setf (cribbage-cut c) card)
+          ;; set Cribbage fields to accumulators
+          (setf (svref (cribbage-plr-hands c) *player-one*) p-one)
+          (setf (svref (cribbage-plr-hands c) *player-two*) p-two)))
       ;; increment COUNTER
       (incf counter))))
 
