@@ -40,8 +40,10 @@
   (format str "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
   (format str "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
   (format str "Dealer: ~A~%" (cribbage-whose-dealer? c))
-  (format str "Player-One-Hand: ~A~%" (cribbage-plr-one-hand c))
-  (format str "Player-Two-Hand: ~A~%" (cribbage-plr-two-hand c))
+  (format str "Player-One-Hand: ~A     "
+    (svref (cribbage-plr-hands c) *player-one*))
+  (format str "Player-Two-Hand: ~A~%"
+    (svref (cribbage-plr-hands c) *player-two*))
   (format str "Crib: ~A~%" (cribbage-crib c))
   (format str "Cut: ~A~%" (cribbage-cut c)))
 
