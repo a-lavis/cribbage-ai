@@ -4,13 +4,6 @@
 
 ;; Contains the functions related to the PLAY segment of Cribbage
 
-;; PLAY
-;; ------------------------------------------
-;; INPUTS: C, a Cribbage game
-;; OUTPUTS: a pile of cards in order of placement
-
-
-
 ;; HAND-TO-PILE!
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
@@ -39,7 +32,10 @@
     ;; update CRIBBAGE fields
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)
     (setf (cribbage-pile c) pile)
-    (setf (cribbage-whose-dealer? c) (toggle-dealer! c))))
+    (setf (cribbage-whose-dealer? c) (toggle-dealer! c))
+
+    ;; call scoring fxn
+    ))
 
 
 ;; PILE-SUM

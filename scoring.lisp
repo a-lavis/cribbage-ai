@@ -4,15 +4,30 @@
 
 ;; Methods in FILE
 ;; --------------------------
-;; HIS-HEELS, GO, FIFTEEN, PAIR, TRIPLE, QUADRUPLE, RUN, FLUSH, HIS-KNOBS
+;; SCORING, HIS-HEELS, GO, FIFTEEN, PAIR, TRIPLE, QUADRUPLE, RUN,
+;;   FLUSH, HIS-KNOBS
 
-;; for now using a pair to represent a player's previous and current scores
-;;  previous score is FIRST, current score is SECOND in the PAIR
+;; using pair to represent players' scores (p1 p2)
+;; convention for keeping previous score doesn't seem to have effect on game
+
+
+;; SCORING
+;; ------------------------------------------
+;; INPUTS: PLR, the player who last put down a card
+;;         PILE, the pile of cards
+;; OUTPUTS: the new score for PLR after all possible scoring opportunities
+;;       have been considered
+
+(defun pile-score (plr pile)
+  ;; get PLR's score
+  (let ((plr-score (svref (cribbage-score c) plr)))
+    ;; call the scoring fxns
+    ))
 
 
 ;; HIS-HEELS
 ;; ------------------------------------------
-;; INPUTS: DEALER-SCORE, the representation of a dealer's SCORE
+;; INPUTS: DEALER-SCORE, the dealer's SCORE
 ;;         CUT, the card flipped over after the CUT
 ;; OUTPUTS: the updated dealer's current score value (adds 2)
 ;; CONDITION: when the card placed on top of the deck is a JACK of any SUIT
@@ -103,7 +118,7 @@
 
 
 
-;; FLUSH -- might not be in the pile    ************************************
+;; FLUSH -- might not in the pile    ************************************
 ;; ------------------------------------------
 ;; INPUTS: CARD-PILE, the pile of cards
 ;;         LAST-PLAYER, the last player to place a CARD
