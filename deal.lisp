@@ -7,14 +7,14 @@
 ;; DEAL
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
-;; OUTPUTS: COUNTER, the counter used to address vector indexes (not used)
-;; SIDE EFFECTS: updates the hand vectors in C, ie. plr-one-hand, plr-two-hand
+;; OUTPUTS: COUNTER, the counter used to decide where to place the card
+;; SIDE EFFECTS: updates the hand lists in C, ie. PLR-ONE-HAND, PLR-TWO-HAND
 
 (defun deal (c)
   ;; generate cards for the ROUND
   (let ((cards-dealt (generate-cards))
-        (p-one (cribbage-plr-one-hand c))
-        (p-two (cribbage-plr-two-hand c))
+        (p-one (svref (cribbage-plr-hand c) *player-one*))
+        (p-two (svref (cribbage-plr-hand c) *player-two*))
         (counter 0))
     (format t "dealt: ~A~%" cards-dealt)
     ;; loop thru CARDS-DEALT
@@ -64,3 +64,29 @@
                     (acc-func card-bucket))))))
       ;; call ACC-FUNC w/ empty CARD-BUCKET
       (acc-func '())))
+
+
+;; HAND-TO-CRIB!
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;;         CHECK-LEGAL?, T or NIL
+;;         CARD, a card (from one of the players' hands)
+;;         PLR, the player (determines whose hand)
+;; OUTPUTS: none
+;; SIDE EFFECTS: takes the specified CARD from PLR-HAND and places into CRIB
+
+(defun hand-to-crib! (c check-legal? card plr)
+  ;; get player's hand and the CRIB
+  (let ((plr-hand (svref (cribbage-plr-hands c) plr))
+        (crib (cribbage-crib c)))
+
+    ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
+    (when (and check-legal? (not in-hand? plr-hand card))
+      ;; print error message
+      (format t "Illegal move!")
+      (return-from hand-to-crib! nil))
+
+    ;; add CARD to CRIB
+    (setf crib (cons card crib))
+    ;; remove CARD from PLR-HAND
+    (remove card plr-hand)))
