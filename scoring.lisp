@@ -10,6 +10,10 @@
 ;;  previous score is FIRST, current score is SECOND in the PAIR
 
 
+;; ====================================
+;; evaluated during DEAL
+;; ====================================
+
 ;; HIS-HEELS
 ;; ------------------------------------------
 ;; INPUTS: DEALER-SCORE, the representation of a dealer's SCORE
@@ -25,6 +29,10 @@
       ;; add 2 to DEALER-CURR
       (+ dealer-curr 2))))
 
+
+;; ====================================
+;; evaluated during PLAY
+;; ====================================
 
 ;; HIS-KNOBS
 ;; ------------------------------------------
@@ -101,7 +109,9 @@
 ;;    rank (can be out of order)
 
 
-
+;; ====================================
+;; evaluated during SHOW
+;; ====================================
 
 ;; FLUSH -- might not be in the pile    ************************************
 ;; ------------------------------------------
