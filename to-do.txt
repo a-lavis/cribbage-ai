@@ -1,16 +1,15 @@
 Cribbage Implementation to finish:
 
 - finish all the scoring functions
-    - His Heels (done)
-    - His Knobs (done)
+    - His Heels (done, checked)
+    - His Knobs (done, checked)
     - Go (done)
     - Fifteen (done)
     - Thirty-One (done)
     - Pair (done)
     - Triple (done)
     - Quadruple (done)
-    - Run
-    - Flush
+    - Run (done)
 - integrate scoring functions into PLAY
 - make SHOW segment of game
   - some of the same scoring functions but w/ different inputs
