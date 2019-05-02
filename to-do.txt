@@ -1,1 +1,14 @@
-Functions that have been called, but aren't written yet:
+Cribbage Implementation to finish:
+
+- finish all the scoring functions
+- integrate scoring functions into PLAY
+- make SHOW segment of game
+  - some of the same scoring functions but w/ different inputs
+
+
+Move-Selection Algorithms to Implement (in order):
+
+- Expectiminimax
+- Expectiminimax w/ pruning
+(maybe just experiment w/ move ordering instead of MCTS)
+- Monte Carlo
