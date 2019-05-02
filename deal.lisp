@@ -12,33 +12,15 @@
 
 (defun deal (c)
   ;; generate cards for the ROUND
-  (let ((cards-dealt (generate-cards))
-        (p-one '())    ;; accumulator for plr-one hand
-        (p-two '())    ;; accumulator for plr-two hand
-        (counter 0))   ;; counter decides where (to whom) the card goes
-    ;; loop thru CARDS-DEALT
-    (dolist (card cards-dealt)
-      (cond
+  (let ((cards-dealt (generate-cards)))
         ;; assign first five cards to PLR-ONE-HAND
-        ((< counter 5)
-          ;; remove CARD from CARDS-DEALT
-          (setf cards-dealt (remove card cards-dealt))
-          ;; CONS CARD onto P-ONE
-          (setf p-one (cons card p-one)))
+        (setf (svref (cribbage-plr-hands c) *player-one*)
+          (subseq cards-dealt 0 5))
         ;; assign second five cards to PLR-TWO-HAND
-        ((< counter 10)
-          ;; remove CARD from CARDS-DEALT
-          (setf cards-dealt (remove card cards-dealt))
-          ;; CONS CARD onto P-TWO
-          (setf p-two (cons card p-two)))
+        (setf (svref (cribbage-plr-hands c) *player-two*)
+          (subseq cards-dealt 6 11))
         ;; assign last card to CUT
-        (t
-          (setf (cribbage-cut c) card)
-          ;; set Cribbage fields to accumulators
-          (setf (svref (cribbage-plr-hands c) *player-one*) p-one)
-          (setf (svref (cribbage-plr-hands c) *player-two*) p-two)))
-      ;; increment COUNTER
-      (incf counter))))
+          (setf (cribbage-cut c) (last cards-dealt))))
 
 
 ;; GENERATE-CARDS
