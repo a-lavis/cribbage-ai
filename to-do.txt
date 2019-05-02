@@ -6,9 +6,9 @@ Cribbage Implementation to finish:
     - Go (done)
     - Fifteen (done)
     - Thirty-One (done)
-    - Pair
-    - Triple
-    - Quadruple
+    - Pair (done)
+    - Triple (done)
+    - Quadruple (done)
     - Run
     - Flush
 - integrate scoring functions into PLAY

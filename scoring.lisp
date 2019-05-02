@@ -119,17 +119,29 @@
 
 ;; PAIR
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
+;; INPUTS: PILE, the pile of cards
 ;; OUTPUTS: 2
-;; CONDITION: when the previous two cards make a PAIR
+;; CONDITION: when the top two cards make a PAIR
+
+(defun pair (pile)
+  ;; top two cards in pile are equal
+  (when (and (>= (length pile) 2)
+             (equal (rank-of (first pile)) (rank-of (second pile))))
+    2))
 
 
 ;; TRIPLE
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
+;; INPUTS: PILE, the pile of cards
 ;; OUTPUTS: 6
 ;; CONDITION: when the previous three cards make a TRIPLE
+
+(defun triple (pile)
+  ;; top three cards in pile are equal
+  (when (and (>= (length pile) 3)
+             (equal (rank-of (first pile))
+                    (rank-of (second pile))
+                    (rank-of (third pile))))))
 
 
 ;; QUADRUPLE
@@ -138,6 +150,14 @@
 ;;         LAST-PLR, the last player to place a CARD
 ;; OUTPUTS: 12
 ;; CONDITION: when the previous three cards make a QUADRUPLE
+
+(defun quadruple (pile)
+  ;; top four cards in pile are equal
+  (when (and (>= (length pile) 4)
+             (equal (rank-of (first pile))
+                    (rank-of (second pile))
+                    (rank-of (third pile))
+                    (rank-of (fourth pile))))))
 
 
 ;; RUN

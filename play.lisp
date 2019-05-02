@@ -30,9 +30,9 @@
     (setf (cribbage-pile c) (cons card pile))
     ;; update CRIBBAGE-PLR-HANDS
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)
-    ;; call scoring fxn
+    ;; call PILE-SCORE
     (setf (svref (cribbage-score c) plr) (pile-score c))
-    ;; change whose-turn?
+    ;; change WHOSE-TURN?
     (setf (cribbage-whose-turn? c) (toggle-turn! c))))
 
 
