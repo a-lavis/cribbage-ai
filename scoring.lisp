@@ -117,65 +117,100 @@
     2))
 
 
-;; PAIR
+;; N-OF-A-KIND
+;; ------------------------------------------
+;; INPUTS: PILE, the pile of CARDS
+;; OUTPUTS: scoring for PAIR, TRIPLE, or QUADRUPLE (exclusive)
+
+(defun n-of-a-kind (pile)
+  (cond
+    ;; score a QUADRUPLE
+    ((quadruple? pile) 12)
+    ;; score a TRIPLE
+    ((triple? pile) 6)
+    ;; score a PAIR
+    ((pair? pile) 2)
+    ;; else 0
+    (t 0)))
+
+
+;; PAIR?
 ;; ------------------------------------------
 ;; INPUTS: PILE, the pile of cards
-;; OUTPUTS: 2
-;; CONDITION: when the top two cards make a PAIR
+;; OUTPUTS: Boolean, T if a pair
 
-(defun pair (pile)
+(defun pair? (pile)
   ;; top two cards in pile are equal
-  (when (and (>= (length pile) 2)
-             (equal (rank-of (first pile)) (rank-of (second pile))))
-    2))
+  (and (>= (length pile) 2)
+           (= (rank-of (first pile)) (rank-of (second pile)))))
 
 
-;; TRIPLE
+;; TRIPLE?
 ;; ------------------------------------------
 ;; INPUTS: PILE, the pile of cards
-;; OUTPUTS: 6
-;; CONDITION: when the previous three cards make a TRIPLE
+;; OUTPUTS: Boolean, T if a triple
 
-(defun triple (pile)
+(defun triple? (pile)
   ;; top three cards in pile are equal
-  (when (and (>= (length pile) 3)
-             (equal (rank-of (first pile))
-                    (rank-of (second pile))
-                    (rank-of (third pile))))))
+  (and (>= (length pile) 3)
+           (= (rank-of (first pile))
+                  (rank-of (second pile))
+                  (rank-of (third pile)))))
 
 
 ;; QUADRUPLE
 ;; ------------------------------------------
 ;; INPUTS: CARD-PILE, the pile of cards
 ;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: 12
-;; CONDITION: when the previous three cards make a QUADRUPLE
+;; OUTPUTS: Boolean, T if a quadruple
 
-(defun quadruple (pile)
+(defun quadruple? (pile)
   ;; top four cards in pile are equal
-  (when (and (>= (length pile) 4)
-             (equal (rank-of (first pile))
-                    (rank-of (second pile))
-                    (rank-of (third pile))
-                    (rank-of (fourth pile))))))
+  (and (>= (length pile) 4)
+           (= (rank-of (first pile))
+                  (rank-of (second pile))
+                  (rank-of (third pile))
+                  (rank-of (fourth pile)))))
 
 
 ;; RUN
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the number of cards in the run
-;; CONDITION: the last NUM-CARD's make have continuous
+;; INPUTS: PILE, the pile of cards
+;; OUTPUTS: the number of cards in the run (if a run is present)
+;; CONDITION: the last three or more cards have continuous
 ;;    rank (can be out of order)
 
+(defun run (pile)
+  ;; get sorted lists of max length 3,4,5
+  (let* ((potential-five (subseq pile 0 (min (length pile) 5)))
+         (potential-four (subseq pile 0 (min (length pile) 4)))
+         (potential-three (subseq pile 0 (min (length pile) 3)))
+         (sorted-five (sort (mapcar #'rank-of potential-five) #'<))
+         (sorted-four (sort (mapcar #'rank-of potential-four) #'<))
+         (sorted-three (sort (mapcar #'rank-of potential-three) #'<)))
+    (cond
+      ;; a RUN of 5
+      ((and (succession? sorted-five)
+            (equal (length sorted-five) 5))
+        5)
+      ;; a RUN of 4
+      ((and (succession? sorted-four)
+            (equal (length sorted-four) 4))
+        4)
+      ;; a RUN of 3
+      ((and (succession? sorted-three)
+            (equal (length sorted-three) 3))
+        3)
+      ;; no RUN
+      (t 0))))
 
-;; ====================================
-;; evaluated during SHOW
-;; ====================================
 
-;; FLUSH -- might not in the pile    ************************************
+;; SUCCESSION?
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 5)
-;; CONDITION: the last 5 cards have the same SUIT
+;; INPUTS: SORTED, a sorted list
+;; OUTPUTS: Boolean, T if difference between all cards is 1
+
+(defun succession? (sorted)
+  (or (null (rest sorted))
+    (and (equal (first sorted) (- (second sorted) 1))
+         (succession? (rest sorted)))))
