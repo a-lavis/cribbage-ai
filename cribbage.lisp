@@ -22,8 +22,8 @@
 ;;    WHOSE-DEALER?  -- either *player-one* or *player-two*
 
 (defstruct (cribbage (:print-function print-cribbage))
-  (score (vector 0 0))
-  (whose-dealer? *player-one*)
+  (score (vector 0 3))   ;;  PLR-2 pegs "three for last"
+  (whose-turn? *player-one*)
   (plr-hands (vector '() '()))
   (crib '())
   (pile '())
@@ -40,7 +40,7 @@
   (declare (ignore depth))
   (format str "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
   (format str "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
-  (format str "Dealer: ~A~%" (cribbage-whose-dealer? c))
+  (format str "Turn: ~A~%" (cribbage-whose-turn? c))
   (format str "Player-One-Hand: ~A     "
     (svref (cribbage-plr-hands c) *player-one*))
   (format str "Player-Two-Hand: ~A~%"
@@ -50,25 +50,25 @@
   (format str "Pile: ~A~%" (cribbage-pile c)))
 
 
-;; TOGGLE-DEALER!
+;; TOGGLE-TURN!
 ;; ------------------------------------------
 ;; INPUTS: C, a cribbage struct
 ;; OUTPUTS: none
 ;; SIDE-EFFECTS: changes whose turn it is
 
-(defun toggle-dealer! (c)
-  ;; get the current dealer
-  (let ((curr-dealer (cribbage-whose-dealer? c)))
-    (setf (cribbage-whose-dealer? c) (switch curr-dealer))))
+(defun toggle-turn! (c)
+  ;; get the current turn
+  (let ((curr-turn (cribbage-whose-turn? c)))
+    (setf (cribbage-whose-turn? c) (switch curr-turn))))
 
 
 ;; SWITCH
 ;; ------------------------------------------
-;; INPUTS: DLR, either *player-one* or *player-two*
+;; INPUTS: PLR, either *player-one* or *player-two*
 ;; OUTPUTS: the other player (either *player-one* or *player-two*)
 
-(defun switch (dlr)
-  (- 1 dlr))
+(defun switch (plr)
+  (- 1 plr))
 
 
 ;; LEGAL-CRIB?
