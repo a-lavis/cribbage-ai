@@ -14,13 +14,11 @@
 ;; PILE-SCORE
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
-;; OUTPUTS: the new score for PLR after all possible scoring opportunities
-;;       have been considered
+;; OUTPUTS: accumulation of points to be added to CRIBBAGE-SCORE
 
 (defun pile-score (c)
   ;; get PLR's score
-  (let* ((plr (cribbage-whose-turn? c))
-         (plr-score (svref (cribbage-score c) plr)))
+  (let* ((plr (cribbage-whose-turn? c)))
     ;; call GO-SCORE and add to other player's score
     (setf (svref (cribbage-score c) (switch plr))
       (+ (svref (cribbage-score c) (switch plr))
@@ -30,9 +28,8 @@
       (his-knobs (first (cribbage-pile c)) (suit-of (cribbage-cut c)))
       (fifteen (pile-sum (cribbage-pile c)))
       (thirty-one (pile-sum (cribbage-pile c)))
-
-
-    ))
+      (n-of-a-kind (cribbage-pile c))
+      (run (cribbage-pile c)))))
 
 
 ;; ====================================
@@ -76,7 +73,6 @@
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
 ;;         CURR-PLR-HAND, the current player's hand
-;;         NEXT-PLR, the other player
 ;; OUTPUTS: 1
 ;; CONDITION: when the next player can't play a card because the PILE-SUM
 ;;    is already 31 or would go over
@@ -86,7 +82,7 @@
   (dolist (card curr-plr-hand)
     ;; CARD-VALUE + PILE-SUM < 31
     (when (<= (+ (card-value card) (pile-sum pile)) 31)
-      (return-from go 0)))
+      (return-from go-score 0)))
   ;; otherwise have gone through CURR-PLR-HAND and no possibilities
   1)
 
@@ -94,20 +90,18 @@
 ;; FIFTEEN
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         SCORE, the score of the last player
 ;; OUTPUTS: 2
 ;; CONDITION: when the PILE-SUM reaches 15
 
 (defun fifteen (pile-sum)
-    ;; if PILE-SUM == 15
-    (when (equal pile-sum 15)
+  ;; if PILE-SUM == 15
+  (when (equal pile-sum 15)
       2))
 
 
 ;; THIRTY-ONE
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         SCORE, the score of the last player
 ;; OUTPUTS: 2
 ;; CONDITION: when the PILE-SUM reaches 31
 
