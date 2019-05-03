@@ -20,9 +20,12 @@
         (setf (svref (cribbage-plr-hands c) *player-two*)
           (subseq cards-dealt 6 11))
         ;; assign last card to CUT
-          (setf (cribbage-cut c) (first (last cards-dealt)))
-        ;; call HIS-HEELS
-        (his-heels (cribbage-cut c))))
+          (setf (cribbage-cut c) (first (last cards-dealt))))
+  ;; call HIS-HEELS and update CRIBBAGE-SCORE
+  (setf (svref (cribbage-score c) (cribbage-whose-dealer? c))
+    (his-heels (cribbage-cut c)))
+  ;; print out updated C
+  (print-cribbage c t 0))
 
 
 ;; GENERATE-CARDS
