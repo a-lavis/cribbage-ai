@@ -18,18 +18,20 @@
 
 (defun pile-score (c)
   ;; get PLR's score
-  (let* ((plr (cribbage-whose-turn? c)))
+  (let* ((plr (cribbage-whose-turn? c))
+         (go-plr (switch plr))
+         (pile (cribbage-pile c)))
     ;; call GO-SCORE and add to other player's score
-    (setf (svref (cribbage-score c) (switch plr))
-      (+ (svref (cribbage-score c) (switch plr))
-        (go-score (cribbage-pile c) plr)))
-    ;; call other scoring fxns and add to current player's score
+    (setf (svref (cribbage-score c) go-plr)
+      (+ (svref (cribbage-score c) go-plr)
+        (go-score (cribbage-pile c) (svref (cribbage-plr-hands c) plr))))
+    ;; accumulate all possible scoring opportunities
     (+
-      (his-knobs (first (cribbage-pile c)) (suit-of (cribbage-cut c)))
-      (fifteen (pile-sum (cribbage-pile c)))
-      (thirty-one (pile-sum (cribbage-pile c)))
-      (n-of-a-kind (cribbage-pile c))
-      (run (cribbage-pile c)))))
+      (his-knobs pile (suit-of (cribbage-cut c)))
+      (fifteen (pile-sum pile))
+      (thirty-one (pile-sum pile))
+      (n-of-a-kind pile)
+      (run pile))))
 
 
 ;; ====================================

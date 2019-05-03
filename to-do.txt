@@ -1,5 +1,5 @@
 Cribbage Implementation to finish:
-    
+
 - integrate scoring functions into PLAY
 - make SHOW segment of game
   - some of the same scoring functions but w/ different inputs
