@@ -1,1 +1,26 @@
-Functions that have been called, but aren't written yet:
+Cribbage Implementation to finish:
+
+- finish all the scoring functions
+    - His Heels (done, checked)
+    - His Knobs (done, checked)
+    - Go (done)
+    - Fifteen (done)
+    - Thirty-One (done)
+    - Pair (done)
+    - Triple (done)
+    - Quadruple (done)
+    - Run (done)
+- integrate scoring functions into PLAY
+- make SHOW segment of game
+  - some of the same scoring functions but w/ different inputs
+  - Flush
+
+- make distinction between switching players for placing on pile
+     and dealer for round
+
+Move-Selection Algorithms to Implement (in order):
+
+- Expectiminimax
+- Expectiminimax w/ pruning
+(maybe just experiment w/ move ordering instead of MCTS)
+- Monte Carlo

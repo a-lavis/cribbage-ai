@@ -11,134 +11,200 @@
 ;; convention for keeping previous score doesn't seem to have effect on game
 
 
-;; SCORING
+;; PILE-SCORE
 ;; ------------------------------------------
-;; INPUTS: PLR, the player who last put down a card
-;;         PILE, the pile of cards
-;; OUTPUTS: the new score for PLR after all possible scoring opportunities
-;;       have been considered
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: accumulation of points to be added to CRIBBAGE-SCORE
 
-(defun pile-score (plr pile)
+(defun pile-score (c)
   ;; get PLR's score
-  (let ((plr-score (svref (cribbage-score c) plr)))
-    ;; call the scoring fxns
-    ))
+  (let* ((plr (cribbage-whose-turn? c)))
+    ;; call GO-SCORE and add to other player's score
+    (setf (svref (cribbage-score c) (switch plr))
+      (+ (svref (cribbage-score c) (switch plr))
+        (go-score (cribbage-pile c) plr)))
+    ;; call other scoring fxns and add to current player's score
+    (+
+      (his-knobs (first (cribbage-pile c)) (suit-of (cribbage-cut c)))
+      (fifteen (pile-sum (cribbage-pile c)))
+      (thirty-one (pile-sum (cribbage-pile c)))
+      (n-of-a-kind (cribbage-pile c))
+      (run (cribbage-pile c)))))
 
+
+;; ====================================
+;; evaluated during DEAL
+;; ====================================
+
+;; HIS-HEELS   ** should only run once
+;; ------------------------------------------
+;; INPUTS: CUT, the card flipped over after the CUT
+;; OUTPUTS: 2
+;; CONDITION: when the card placed on top of the deck is a JACK of any SUIT
+
+(defun his-heels (cut)
+    ;; if CUT == JACK
+    (when (equal (rank-of cut) *jack*)
+      ;; return value of the scoring opportunity
+      2))
 
 ;; ====================================
 ;; evaluated during PLAY
 ;; ====================================
 
-;; HIS-HEELS
-;; ------------------------------------------
-;; INPUTS: DLR-SCORE, the dealer's SCORE
-;;         CUT, the card flipped over after the CUT
-;; OUTPUTS: the updated dealer's current score value (adds 2)
-;; CONDITION: when the card placed on top of the deck is a JACK of any SUIT
-
-(defun his-heels (dlr-score cut)
-    ;; if CUT == JACK
-    (when (equal (rank-of cut) *jack*)
-      ;; add 2 to DLR-SCORE
-      (+ dlr-score 2)))
-
-
 ;; HIS-KNOBS
 ;; ------------------------------------------
-;; INPUTS: TOP-CARD, the top card of the PILE
+;; INPUTS: PILE, the pile of cards
 ;;         CUT-SUIT, the SUIT of the card placed after the CUT
-;;         LAST-PLR, the last player to place a CARD
-;;         SCORE, the score of the last player
-;; OUTPUTS: the updated LAST-PLR's score (adds 1)
-;; CONDITION: the TOP-CARD matches the CUT-SUIT
+;; OUTPUTS: 1
+;; CONDITION: the TOP-CARD matches the CUT-SUIT, only on first card
 
-(defun his-knobs (top-card cut-suit last-plr score)
-    ;; if TOP-CARD == CUT-SUIT
-    (when (equal (suit-of top-card) cut-suit)
-      ;; add 1 to SCORE
-      (+ score 1)))
+(defun his-knobs (pile cut-suit)
+  ;; get TOP-CARD
+  (let ((top-card (first pile)))
+    ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
+    (when (and (equal (length pile) 1)
+               (equal (suit-of top-card) cut-suit))
+      ;; return value of this scoring opportunity
+      1)))
 
 
-;; GO
+;; GO-SCORE  -- scored retroactively
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         LAST-PLR, the last player to place a CARD
-;;         OTHER-PLR
-;; OUTPUTS: the updated LAST-PLR's score (adds 1)
+;;         CURR-PLR-HAND, the current player's hand
+;; OUTPUTS: 1
 ;; CONDITION: when the next player can't play a card because the PILE-SUM
 ;;    is already 31 or would go over
 
+(defun go-score (pile curr-plr-hand)
+  ;; iterate thru CURR-PLR-HAND
+  (dolist (card curr-plr-hand)
+    ;; CARD-VALUE + PILE-SUM < 31
+    (when (<= (+ (card-value card) (pile-sum pile)) 31)
+      (return-from go-score 0)))
+  ;; otherwise have gone through CURR-PLR-HAND and no possibilities
+  1)
 
 
 ;; FIFTEEN
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         LAST-PLR, the last player to place a CARD
-;;         SCORE, the score of the last player
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 2)
+;; OUTPUTS: 2
 ;; CONDITION: when the PILE-SUM reaches 15
 
-(defun fifteen (pile-sum last-plr score)
-    ;; if PILE-SUM == 15
-    (when (equal pile-sum 15)
-      (+ score 2)))
+(defun fifteen (pile-sum)
+  ;; if PILE-SUM == 15
+  (when (equal pile-sum 15)
+      2))
 
 
 ;; THIRTY-ONE
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         LAST-PLR, the last player to place a CARD
-;;         SCORE, the score of the last player
-;; OUTPUTS: the updated LAST-PLR's score (adds 2)
+;; OUTPUTS: 2
 ;; CONDITION: when the PILE-SUM reaches 31
 
-(defun thirty-one (pile-sum last-plr score)
+(defun thirty-one (pile-sum)
   ;; if PILE-SUM == 31
   (when (equal pile-sum 31)
-    (+ score 2)))
+    2))
 
 
-;; PAIR
+;; N-OF-A-KIND
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 2)
-;; CONDITION: when the previous two cards make a PAIR
+;; INPUTS: PILE, the pile of CARDS
+;; OUTPUTS: scoring for PAIR, TRIPLE, or QUADRUPLE (exclusive)
+
+(defun n-of-a-kind (pile)
+  (cond
+    ;; score a QUADRUPLE
+    ((quadruple? pile) 12)
+    ;; score a TRIPLE
+    ((triple? pile) 6)
+    ;; score a PAIR
+    ((pair? pile) 2)
+    ;; else 0
+    (t 0)))
 
 
-;; TRIPLE
+;; PAIR?
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 6)
-;; CONDITION: when the previous three cards make a TRIPLE
+;; INPUTS: PILE, the pile of cards
+;; OUTPUTS: Boolean, T if a pair
+
+(defun pair? (pile)
+  ;; top two cards in pile are equal
+  (and (>= (length pile) 2)
+           (= (rank-of (first pile)) (rank-of (second pile)))))
+
+
+;; TRIPLE?
+;; ------------------------------------------
+;; INPUTS: PILE, the pile of cards
+;; OUTPUTS: Boolean, T if a triple
+
+(defun triple? (pile)
+  ;; top three cards in pile are equal
+  (and (>= (length pile) 3)
+           (= (rank-of (first pile))
+                  (rank-of (second pile))
+                  (rank-of (third pile)))))
 
 
 ;; QUADRUPLE
 ;; ------------------------------------------
 ;; INPUTS: CARD-PILE, the pile of cards
 ;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 12)
-;; CONDITION: when the previous three cards make a QUADRUPLE
+;; OUTPUTS: Boolean, T if a quadruple
+
+(defun quadruple? (pile)
+  ;; top four cards in pile are equal
+  (and (>= (length pile) 4)
+           (= (rank-of (first pile))
+                  (rank-of (second pile))
+                  (rank-of (third pile))
+                  (rank-of (fourth pile)))))
 
 
 ;; RUN
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         NUM-CARDS, the number of cards in the RUN
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds NUM-CARDS)
-;; CONDITION: the last NUM-CARD's make have continuous
+;; INPUTS: PILE, the pile of cards
+;; OUTPUTS: the number of cards in the run (if a run is present)
+;; CONDITION: the last three or more cards have continuous
 ;;    rank (can be out of order)
 
+(defun run (pile)
+  ;; get sorted lists of max length 3,4,5
+  (let* ((potential-five (subseq pile 0 (min (length pile) 5)))
+         (potential-four (subseq pile 0 (min (length pile) 4)))
+         (potential-three (subseq pile 0 (min (length pile) 3)))
+         (sorted-five (sort (mapcar #'rank-of potential-five) #'<))
+         (sorted-four (sort (mapcar #'rank-of potential-four) #'<))
+         (sorted-three (sort (mapcar #'rank-of potential-three) #'<)))
+    (cond
+      ;; a RUN of 5
+      ((and (succession? sorted-five)
+            (equal (length sorted-five) 5))
+        5)
+      ;; a RUN of 4
+      ((and (succession? sorted-four)
+            (equal (length sorted-four) 4))
+        4)
+      ;; a RUN of 3
+      ((and (succession? sorted-three)
+            (equal (length sorted-three) 3))
+        3)
+      ;; no RUN
+      (t 0))))
 
-;; ====================================
-;; evaluated during SHOW
-;; ====================================
 
-;; FLUSH -- might not in the pile    ************************************
+;; SUCCESSION?
 ;; ------------------------------------------
-;; INPUTS: CARD-PILE, the pile of cards
-;;         LAST-PLR, the last player to place a CARD
-;; OUTPUTS: the updated LAST-PLAYER's score (adds 5)
-;; CONDITION: the last 5 cards have the same SUIT
+;; INPUTS: SORTED, a sorted list
+;; OUTPUTS: Boolean, T if difference between all cards is 1
+
+(defun succession? (sorted)
+  (or (null (rest sorted))
+    (and (equal (first sorted) (- (second sorted) 1))
+         (succession? (rest sorted)))))

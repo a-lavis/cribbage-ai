@@ -12,12 +12,13 @@
 ;; list of files for CRIBBAGE implementation:
 (defparameter *cribbage-files*
   (list "basic-defns"
+        "cribbage"
+        "scoring"
         "cards"
         "deal"
         "play"
         "show"
-        "cribbage"
-        "scoring"))
+        ))
 
 
 ;; MAKER

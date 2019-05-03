@@ -15,27 +15,25 @@
 
 (defun hand-to-pile! (c check-legal? card plr)
   ;; get player's hand
-  (let ((plr-hand (svref (cribbage-plr-hands c) plr))
-        (pile (cribbage-pile c)))
+  (let ((plr-hand (svref (cribbage-plr-hands c) plr)))
 
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
-    (when (and check-legal? (not (legal-play? plr-hand pile card)))
+    (when (and check-legal? (not (legal-play? plr-hand (cribbage-pile c) card)))
       ;; print error message
-      (format t "Illegal play! Potential issues: crib is full, card is
-        not in your hand, you've already passed two cards to the crib.")
+      (format t "Illegal play! Potential issues: pile will go over 31 with
+        any of your remaining cards, no cards left, not a card.")
       (return-from hand-to-pile! nil))
 
     ;; remove CARD from PLR-HAND
     (setf plr-hand (remove card plr-hand))
     ;; add CARD to PILE
-    (setf pile (cons card pile))
-    ;; update CRIBBAGE fields
+    (setf (cribbage-pile c) (cons card pile))
+    ;; update CRIBBAGE-PLR-HANDS
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)
-    (setf (cribbage-pile c) pile)
-    (setf (cribbage-whose-dealer? c) (toggle-dealer! c))
-
-    ;; call scoring fxn
-    ))
+    ;; call PILE-SCORE
+    (setf (svref (cribbage-score c) plr) (pile-score c))
+    ;; change WHOSE-TURN?
+    (setf (cribbage-whose-turn? c) (toggle-turn! c))))
 
 
 ;; PILE-SUM

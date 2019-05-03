@@ -4,11 +4,11 @@
 
 ;; Explanation of card deck implementation
 ;;  cards will have a value 0-51
+
 ;;  spades will be 0-12
 ;;  clubs will be 13-25
 ;;  hearts will be 26-38
 ;;  diamonds will be 39-51
-
 
 ;; Constants for suits
 (defconstant *spades* 0)
@@ -36,8 +36,7 @@
 (defun make-card (rank suit)
   (+ rank (* 13 suit)))
 
-;;;; example:
-;; (defconstant ace-of-spades (make-card *ace* *spades*))
+;; example: ace-of-spades == (make-card *ace* *spades*)
 
 ;; RANK-OF
 ;; ------------------------------------------
@@ -54,7 +53,7 @@
 ;; OUTPUTS: a number referring to the applicable SUIT
 
 (defun suit-of (card)
-  (floor (/ card 13)))
+  (values (floor (/ card 13))))
 
 ;; CARD->STRING
 ;; ------------------------------------------
