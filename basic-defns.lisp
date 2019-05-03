@@ -12,9 +12,9 @@
 ;; list of files for CRIBBAGE implementation:
 (defparameter *cribbage-files*
   (list "basic-defns"
+        "cards"
         "cribbage"
         "scoring"
-        "cards"
         "deal"
         "play"
         "show"
