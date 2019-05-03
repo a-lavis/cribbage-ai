@@ -41,8 +41,8 @@
   (declare (ignore depth))
   (format str "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
   (format str "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
-  (format str "Dealer: ~A   " (cribbage-whose-dealer? c))
-  (format str "Turn: ~A~%" (cribbage-whose-turn? c))
+  (format str "Dealer: ~A   " (+ (cribbage-whose-dealer? c) 1))
+  (format str "Turn: ~A~%" (+ (cribbage-whose-turn? c) 1))
   (format str "Player-One-Hand: ~A     "
     (svref (cribbage-plr-hands c) *player-one*))
   (format str "Player-Two-Hand: ~A~%"
