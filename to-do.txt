@@ -1,12 +1,6 @@
 Cribbage Implementation to finish:
 
-- integrate scoring functions into PLAY
-- make SHOW segment of game
-  - some of the same scoring functions but w/ different inputs
-  - Flush
-
-- make distinction between switching players for placing on pile
-     and dealer for round
+- plr-hands?  how do i get them when after the play / during the show ?
 
 Move-Selection Algorithms to Implement (in order):
 
