@@ -14,7 +14,6 @@
   (list "basic-defns"
         "cards"
         "cribbage"
-        "scoring"
         "deal"
         "play"
         "show"
