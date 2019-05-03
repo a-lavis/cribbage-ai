@@ -22,9 +22,9 @@
         ;; assign last card to CUT
           (setf (cribbage-cut c) (first (last cards-dealt))))
   ;; call HIS-HEELS and update CRIBBAGE-SCORE
-  (setf (svref (cribbage-score c) (cribbage-whose-dealer? c))
-    (his-heels (+ (svref (cribbage-score c) (cribbage-whose-dealer? c))
-                  (cribbage-cut c))))
+  (incf (svref (cribbage-score c) (cribbage-whose-dealer? c))
+    (his-heels (svref (cribbage-score c) (cribbage-whose-dealer? c))
+                  (cribbage-cut c)))
   ;; print out updated C
   (print-cribbage c t 1))
 
@@ -57,27 +57,32 @@
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
 ;;         CHECK-LEGAL?, T or NIL
-;;         CARD, a card (from one of the players' hands)
+;;         CARD1, a card (from one of the players' hands)
+;;         CARD2, a card
 ;;         PLR, the player (determines whose hand)
 ;; OUTPUTS: none
 ;; SIDE EFFECTS: takes the specified CARD from PLR-HAND and places into CRIB
 
-(defun hand-to-crib! (c check-legal? card plr)
+(defun hand-to-crib! (c check-legal? card1 card2 plr)
   ;; get player's hand and the CRIB
   (let ((plr-hand (svref (cribbage-plr-hands c) plr))
         (crib (cribbage-crib c)))
-    ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
-    (when (and check-legal? (not (legal-crib? plr-hand crib card)))
+    ;; check if cards legal (ie. in hand)... if CHECK-LEGAL? == T
+    (when (and check-legal? (not (legal-crib? plr-hand crib card1))
+                            (not (legal-crib? plr-hand crib card2))
+                            (not (equal card1 card2)))
       ;; print error message
       (format t "Illegal play! Potential issues: crib is full, card is
         not in your hand, you've already passed two cards to the crib.")
       (return-from hand-to-crib! nil))
     ;; add CARD to CRIB
-    (setf crib (cons card crib))
+    (setf crib (append (list card1 card2) crib))
     ;; remove CARD from PLR-HAND
     (setf plr-hand (remove card plr-hand))
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
+    ;; change WHOSE-TURN?
+    (toggle-turn! c)
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)))
 
 ;; HIS-HEELS
