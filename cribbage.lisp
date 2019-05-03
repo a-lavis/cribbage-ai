@@ -24,6 +24,7 @@
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 3))   ;;  PLR-2 pegs "three for last"
   (whose-turn? *player-one*)
+  (whose-dealer? *player-one*)
   (plr-hands (vector '() '()))
   (crib '())
   (pile '())
@@ -40,6 +41,7 @@
   (declare (ignore depth))
   (format str "Player-One-Score: ~A   " (svref (cribbage-score c) *player-one*))
   (format str "Player-Two-Score: ~A   " (svref (cribbage-score c) *player-two*))
+  (format str "Dealer: ~A   " (cribbage-whose-dealer? c))
   (format str "Turn: ~A~%" (cribbage-whose-turn? c))
   (format str "Player-One-Hand: ~A     "
     (svref (cribbage-plr-hands c) *player-one*))
@@ -60,6 +62,18 @@
   ;; get the current turn
   (let ((curr-turn (cribbage-whose-turn? c)))
     (setf (cribbage-whose-turn? c) (switch curr-turn))))
+
+
+;; TOGGLE-DEALER!
+;; ------------------------------------------
+;; INPUTS: C, a cribbage struct
+;; OUTPUTS: none
+;; SIDE-EFFECTS: changes who's dealer for the round
+
+(defun toggle-dealer! (c)
+  ;; get the current dealer
+  (let ((curr-dlr (cribbage-whose-dealer? c)))
+    (setf (cribbage-whose-dealer? c) (switch curr-dlr))))
 
 
 ;; SWITCH
