@@ -1,3 +1,20 @@
+(defun show (c)
+  (let ((cut (cribbage-cut c))
+        (plr-hands (cribbage-plr-hands c)))
+    (labels ((hand-score (plr)
+                    (incf (svref (cribbage-score c) plr)
+                          (hand-value cut (svref plr-hands plr)))))
+      (hand-score *player-one*)
+      (hand-score *player-two*)
+      (incf (svref (cribbage-score c) (cribbage-whose-dealer? c))
+            (crib-value cut (cribbage-crib c)))
+      )))
+
+
+;; -------------------------------------------------------------------------- ;;
+;; ------------------------- card-scoring functions ------------------------- ;;
+;; -------------------------------------------------------------------------- ;;
+
 (defun make-hand (c1 c2 c3)
   (list c1 c2 c3))
 (defun make-crib (c1 c2 c3 c4)
