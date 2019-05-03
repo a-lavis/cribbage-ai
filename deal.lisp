@@ -81,3 +81,13 @@
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)))
+
+;; HIS-HEELS
+;; ------------------------------------------
+;; INPUTS: CUT, the card flipped over after the CUT
+;; OUTPUTS: 2
+;; CONDITION: when the card placed on top of the deck is a JACK of any SUIT
+
+(defun his-heels (cut)
+  ;; if CUT == JACK, return 2, else 0
+  (if (equal (rank-of cut) *jack*) 2 0))
