@@ -19,7 +19,12 @@
 ;; ------------------------------------------
 ;; Fields:
 ;;    SCORE          -- a vector holding the scores for each player
+;;    WHOSE-TURN?    -- either *player-one* or *player-two*
 ;;    WHOSE-DEALER?  -- either *player-one* or *player-two*
+;;    PLR-HANDS      -- a vector holding the hands for each player
+;;    CRIB           -- holds the cards placed in the crib after DEAL
+;;    PILE           -- holds the cards placed in the pile during PLAY
+;;    CUT            -- holds the card that is turned up after deck is cut
 
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 3))   ;;  PLR-2 pegs "three for last"
