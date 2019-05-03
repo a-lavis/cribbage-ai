@@ -2,6 +2,9 @@
 # Created by https://www.gitignore.io/api/vim,emacs,commonlisp
 # Edit at https://www.gitignore.io/?templates=vim,emacs,commonlisp
 
+# Atom Git thingy
+.nfs*
+
 ### CommonLisp ###
 *.FASL
 *.fasl
