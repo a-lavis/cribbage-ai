@@ -1,12 +1,27 @@
 (defun make-hand (c1 c2 c3)
   (list c1 c2 c3))
+(defun make-crib (c1 c2 c3 c4)
+  (list c1 c2 c3 c4))
+
+(defun print-cards (cards)
+  (print-card (first cards))
+  (print-cards (rest cards)))
 
 (defun hand-value (cut hand)
   (let ((cards (cons cut hand)))
     (+ (fifteen-score cards)
        (tuple-score cards)
        (run-score cards)
-       (flush-score cut hand))))
+       (flush-score-hand cut hand))))
+
+(defun crib-value (cut crib)
+  (cards-value (cons cut crib)))
+(defun cards-value (cards)
+  (+ (fifteen-score cards)
+     (tuple-score cards)
+     (run-score cards)
+     (flush-score cards)))
+
 
 (defun power-set (listy)
   (if (null listy)
@@ -25,17 +40,6 @@
                                  (t (count-fifteens (rest pset))))))
     (* 2 (count-fifteens (power-set (mapcar #'card-value cards))))))
 
-#|
-(defun fifteen-score-2 (cards)
-  (labels ((count-15s
-             (c-vals)
-             (if (null c-vals)
-               0
-               (let ((rest-15s (count-15s (rest c-vals))))
-                 (+ (mapcar (lambda (subby)
-                              (+ (first c-vals) subby)))))))))
-|#
-
 (defun tuple-score (cards)
   (let ((score-vec #('error 0 2 6 12)))
     (labels ((count-tuples
@@ -49,30 +53,35 @@
                      )))
       (count-tuples (sort (mapcar #'rank-of cards) #'<) -2 1))))
 
-;; doesn't work properly for '(1 2 2 3 3)...
-;; when there is more than one tuple in a run
 (defun run-score (cards)
   (labels ((count-runs
              (ranks last-rank run-count multi)
-             (cond ((null ranks) (* multi (if (>= run-count 3) run-count 0)))
-                   ((= (first ranks) last-rank)
-                    (count-runs (rest ranks) (first ranks)
-                               run-count (+ multi 1)))
-                   ((= (first ranks) (+ 1 last-rank))
-                    (count-runs (rest ranks) (first ranks)
-                               (+ run-count 1) multi))
-                   (t
-                     (+ (* multi (if (>= run-count 3) run-count 0))
-                        (count-runs (rest ranks) (first ranks) 1 1)))
-                   )))
-    (count-runs (sort (mapcar #'rank-of cards) #'<) -2 1 1)))
-#|
-(labels ((count-runs
-           (ranks last-rank counter)
-           (cond ((null ranks) counter)
-                 ((=
-|#
-#|
+             (let ((score (* (apply #'* multi)
+                             (if (>= run-count 3) run-count 0))))
+               (cond ((null ranks) score)
+                     ((= (first ranks) last-rank)
+                      (count-runs (rest ranks) (first ranks)
+                                  run-count (cons (1+ (first multi))
+                                                  (rest multi))))
+                     ((= (first ranks) (+ 1 last-rank))
+                      (count-runs (rest ranks) (first ranks)
+                                  (+ run-count 1) (cons 1 multi)))
+                     (t
+                       (+ score 
+                          (count-runs (rest ranks) (first ranks) 1 '(1))))
+                     ))))
+    (count-runs (sort (mapcar #'rank-of cards) #'<) -2 1 '(1))))
+
+(defun flush-score-hand (cut hand)
+  (let ((suits (mapcar #'suit-of hand)))
+    (if (apply #'= suits)
+      (+ (length hand)
+         (if (= (suit-of cut) (first suits))
+           1
+           0))
+      0)))
+
 (defun flush-score (cards)
-  (labels ((
-            |#
+  (if (apply #'= (mapcar #'suit-of cards))
+    (length cards)
+    0))
