@@ -23,8 +23,7 @@
           (setf (cribbage-cut c) (first (last cards-dealt))))
   ;; call HIS-HEELS and update CRIBBAGE-SCORE
   (incf (svref (cribbage-score c) (cribbage-whose-dealer? c))
-    (his-heels (svref (cribbage-score c) (cribbage-whose-dealer? c))
-                  (cribbage-cut c)))
+    (his-heels (cribbage-cut c)))
   ;; print out updated C
   (print-cribbage c t 1))
 
