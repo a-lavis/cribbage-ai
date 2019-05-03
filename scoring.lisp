@@ -36,17 +36,15 @@
 ;; evaluated during DEAL
 ;; ====================================
 
-;; HIS-HEELS   ** should only run once
+;; HIS-HEELS
 ;; ------------------------------------------
 ;; INPUTS: CUT, the card flipped over after the CUT
 ;; OUTPUTS: 2
 ;; CONDITION: when the card placed on top of the deck is a JACK of any SUIT
 
 (defun his-heels (cut)
-    ;; if CUT == JACK
-    (when (equal (rank-of cut) *jack*)
-      ;; return value of the scoring opportunity
-      2))
+    ;; if CUT == JACK, return 2, else 0
+    (if (equal (rank-of cut) *jack*) 2 0))
 
 ;; ====================================
 ;; evaluated during PLAY
@@ -66,7 +64,9 @@
     (when (and (equal (length pile) 1)
                (equal (suit-of top-card) cut-suit))
       ;; return value of this scoring opportunity
-      1)))
+      (return-from his-knobs 1)))
+  ;; otherwise return 0
+  0)
 
 
 ;; GO-SCORE  -- scored retroactively
@@ -95,8 +95,7 @@
 
 (defun fifteen (pile-sum)
   ;; if PILE-SUM == 15
-  (when (equal pile-sum 15)
-      2))
+  (if (equal pile-sum 15) 2 0))
 
 
 ;; THIRTY-ONE
@@ -107,8 +106,7 @@
 
 (defun thirty-one (pile-sum)
   ;; if PILE-SUM == 31
-  (when (equal pile-sum 31)
-    2))
+  (if (equal pile-sum 31) 2 0))
 
 
 ;; N-OF-A-KIND
