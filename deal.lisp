@@ -23,9 +23,10 @@
           (setf (cribbage-cut c) (first (last cards-dealt))))
   ;; call HIS-HEELS and update CRIBBAGE-SCORE
   (setf (svref (cribbage-score c) (cribbage-whose-dealer? c))
-    (his-heels (cribbage-cut c)))
+    (his-heels (+ (svref (cribbage-score c) (cribbage-whose-dealer? c))
+                  (cribbage-cut c))))
   ;; print out updated C
-  (print-cribbage c t 0))
+  (print-cribbage c t 1))
 
 
 ;; GENERATE-CARDS
