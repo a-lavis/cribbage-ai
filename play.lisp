@@ -29,9 +29,13 @@
     ;; update CRIBBAGE-PLR-HANDS
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)
     ;; call PILE-SCORE
-    (setf (svref (cribbage-score c) plr) (pile-score c))
+    (setf (svref (cribbage-score c) plr)
+      ( + (svref (cribbage-score c) plr)
+          (pile-score c)))
     ;; change WHOSE-TURN?
-    (setf (cribbage-whose-turn? c) (toggle-turn! c))))
+    (setf (cribbage-whose-turn? c) (toggle-turn! c)))
+  ;; print Cribbage struct
+  (print-cribbage c t 1))
 
 
 ;; PILE-SUM
