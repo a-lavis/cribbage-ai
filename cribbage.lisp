@@ -49,12 +49,12 @@
   (format str "Dealer: ~A   " (+ (cribbage-whose-dealer? c) 1))
   (format str "Turn: ~A~%" (+ (cribbage-whose-turn? c) 1))
   (format str "Player-One-Hand: ~A     "
-    (svref (cribbage-plr-hands c) *player-one*))
+    (mapcar #'card->string (svref (cribbage-plr-hands c) *player-one*)))
   (format str "Player-Two-Hand: ~A~%"
-    (svref (cribbage-plr-hands c) *player-two*))
-  (format str "Cut: ~A   " (cribbage-cut c))
-  (format str "Crib: ~A   " (cribbage-crib c))
-  (format str "Pile: ~A~%" (cribbage-pile c)))
+    (mapcar #'card->string (svref (cribbage-plr-hands c) *player-two*)))
+  (format str "Cut: ~A   " (card->string (cribbage-cut c)))
+  (format str "Crib: ~A   " (card->string (cribbage-crib c)))
+  (format str "Pile: ~A~%" (mapcar #'card->string (cribbage-pile c))))
 
 
 ;; TOGGLE-TURN!
