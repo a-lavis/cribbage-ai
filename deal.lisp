@@ -77,7 +77,7 @@
     ;; add CARD to CRIB
     (setf crib (append (list card1 card2) crib))
     ;; remove CARD from PLR-HAND
-    (setf plr-hand (remove card plr-hand))
+    (setf plr-hand (remove (list card1 card2) plr-hand))
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
     ;; change WHOSE-TURN?
