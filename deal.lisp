@@ -18,7 +18,7 @@
           (subseq cards-dealt 0 5))
         ;; assign second five cards to PLR-TWO-HAND
         (setf (svref (cribbage-plr-hands c) *player-two*)
-          (subseq cards-dealt 6 11))
+          (subseq cards-dealt 5 10))
         ;; assign last card to CUT
           (setf (cribbage-cut c) (first (last cards-dealt))))
   ;; call HIS-HEELS and update CRIBBAGE-SCORE
@@ -39,7 +39,7 @@
               ;; deal a CARD
               (let ((card (deal-card)))
                 (cond
-                  ;;  (LENGTH CARD-BUCKET) == 11
+                  ;;  we have 11 CARDS
                   ((>= (length card-bucket) 11)
                     card-bucket)
                   ;; CARD is not a MEMBER of CARD-BUCKET
@@ -76,8 +76,9 @@
       (return-from hand-to-crib! nil))
     ;; add CARD to CRIB
     (setf crib (append (list card1 card2) crib))
-    ;; remove CARD from PLR-HAND
-    (setf plr-hand (remove (list card1 card2) plr-hand))
+    ;; remove CARDS from PLR-HAND
+    (setf plr-hand (remove card1 plr-hand))
+    (setf plr-hand (remove card2 plr-hand))
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
     ;; change WHOSE-TURN?
