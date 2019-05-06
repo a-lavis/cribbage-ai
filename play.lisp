@@ -52,28 +52,28 @@
          (go-score (cribbage-pile c) (svref (cribbage-plr-hands c) plr))))
     ;; accumulate all possible scoring opportunities
     (+
-      (his-knobs pile (suit-of (cribbage-cut c)))
+      (his-nobs pile (suit-of (cribbage-cut c)))
       (fifteen (pile-sum pile))
       (thirty-one (pile-sum pile))
       (n-of-a-kind pile)
       (run pile))))
 
 
-;; HIS-KNOBS
+;; HIS-NOBS
 ;; ------------------------------------------
 ;; INPUTS: PILE, the pile of cards
 ;;         CUT-SUIT, the SUIT of the card placed after the CUT
 ;; OUTPUTS: 1
 ;; CONDITION: the TOP-CARD matches the CUT-SUIT, only on first card
 
-(defun his-knobs (pile cut-suit)
+(defun his-nobs (pile cut-suit)
   ;; get TOP-CARD
   (let ((top-card (first pile)))
   ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
   (when (and (equal (length pile) 1)
              (equal (suit-of top-card) cut-suit))
     ;; return value of this scoring opportunity
-    (return-from his-knobs 1)))
+    (return-from his-nobs 1)))
   ;; otherwise return 0
   0)
 
