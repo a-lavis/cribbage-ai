@@ -52,8 +52,10 @@
     (mapcar #'card->string (svref (cribbage-plr-hands c) *player-one*)))
   (format str "Player-Two-Hand: ~A~%"
     (mapcar #'card->string (svref (cribbage-plr-hands c) *player-two*)))
-  (format str "Cut: ~A   " (card->string (cribbage-cut c)))
-  (format str "Crib: ~A   " (card->string (cribbage-crib c)))
+  ;; CUT is initialized as NIL, CARD->STRING doesn't like that
+  (when (cribbage-cut c)
+    (format str "Cut: ~A   " (card->string (cribbage-cut c))))
+  (format str "Crib: ~A   " (mapcar #'card->string (cribbage-crib c)))
   (format str "Pile: ~A~%" (mapcar #'card->string (cribbage-pile c))))
 
 
