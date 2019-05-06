@@ -36,15 +36,6 @@
   (print-cribbage c t 1))
 
 
-;; PILE-SUM
-;; ------------------------------------------
-;; INPUTS: PILE, the card pile
-;; OUPUTS: the sum of all the card-values in PILE
-
-(defun pile-sum (pile)
-  (apply #'+ (mapcar #'card-value pile)))
-
-
 ;; PILE-SCORE
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game

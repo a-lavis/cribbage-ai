@@ -121,7 +121,6 @@
     ;; sum of PILE would be <= 31
     (<= (+ (card-value card) (pile-sum pile)) 31)))
 
-
 ;; GAME-OVER?
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
@@ -133,3 +132,12 @@
         (p-two-score (svref (cribbage-score c) *player-two*)))
     ;; GAME OVER if either is >= 61
     (or (>= p-one-score 61) (>= p-two-score 61))))
+
+
+;; PILE-SUM
+;; ------------------------------------------
+;; INPUTS: PILE, the card pile
+;; OUPUTS: the sum of all the card-values in PILE
+
+(defun pile-sum (pile)
+  (apply #'+ (mapcar #'card-value pile)))
