@@ -1,6 +1,7 @@
 Cribbage Implementation to finish:
 
 - plr-hands?  how do i get them when after the play / during the show ?
+- figure out how to accurately use GO-SCORE (ie. when to check)
 
 Move-Selection Algorithms to Implement (in order):
 
