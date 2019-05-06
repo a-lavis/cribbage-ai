@@ -3,12 +3,12 @@
 ;; ==========================================
 
 ;; Explanation of card deck implementation
-;;  cards will have a value 0-51
+;;  cards will have a value 1-52
 
-;;  spades will be 0-12
-;;  clubs will be 13-25
-;;  hearts will be 26-38
-;;  diamonds will be 39-51
+;;  spades will be 1-13
+;;  clubs will be 14-26
+;;  hearts will be 27-39
+;;  diamonds will be 40-52
 
 ;; Constants for suits
 (defconstant *spades* 0)
@@ -19,19 +19,19 @@
 (defconstant *suit-vec* #("S" "C" "H" "D"))
 
 ;; Constants for special rank
-(defconstant *ace* 0)
-(defconstant *jack* 10)
-(defconstant *queen* 11)
-(defconstant *king* 12)
+(defconstant *ace* 1)
+(defconstant *jack* 11)
+(defconstant *queen* 12)
+(defconstant *king* 13)
 ;; the rank vector
-(defconstant *rank-vec* #("A" "2" "3" "4" "5" "6" "7" "8" "9" "10"
+(defconstant *rank-vec* #("error" "A" "2" "3" "4" "5" "6" "7" "8" "9" "10"
                           "J" "Q" "K"))
 
 ;; MAKE-CARD
 ;; ------------------------------------------
 ;; INPUTS: RANK, the rank of a CARD
 ;;         SUIT, the suit of a CARD
-;; OUTPUT: a card value (0-51)
+;; OUTPUT: a card value (1-52)
 
 (defun make-card (rank suit)
   (+ rank (* 13 suit)))
@@ -40,24 +40,24 @@
 
 ;; RANK-OF
 ;; ------------------------------------------
-;; INPUTS: CARD, the value (0-51)
+;; INPUTS: CARD, the value (1-52)
 ;; OUTPUTS: a number referring to the applicable RANK
 
 (defun rank-of (card)
-  (mod card 13))
+  (1+ (mod (1- card) 13)))
 
 
 ;; SUIT-OF
 ;; ------------------------------------------
-;; INPUTS: CARD, the value (0-51)
+;; INPUTS: CARD, the value (1-52)
 ;; OUTPUTS: a number referring to the applicable SUIT
 
 (defun suit-of (card)
-  (values (floor (/ card 13))))
+  (values (floor (/ (1- card) 13))))
 
 ;; CARD->STRING
 ;; ------------------------------------------
-;; INPUTS: CARD, a number (0-51) referring to a CARD in the deck
+;; INPUTS: CARD, a number (1-52) referring to a CARD in the deck
 ;; OUTPUTS: a string illustrating that CARD
 
 (defun card->string (card) ;; add verbose option? "ace of spades"
@@ -79,7 +79,7 @@
 ;; OUTPUTS: a random card number
 
 (defun deal-card ()
-  (random 52))
+  (1+ (random 52)))
 
 
 ;; CARD-VALUE
@@ -89,6 +89,4 @@
 
 (defun card-value (card)
   ;; royal cards are all worth 10
-  (if (> (rank-of card) 9)
-    10
-    (+ 1 (rank-of card))))
+  (min (rank-of card) 10))
