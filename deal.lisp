@@ -83,7 +83,9 @@
     (setf (cribbage-crib c) crib)
     ;; change WHOSE-TURN?
     (toggle-turn! c)
-    (setf (svref (cribbage-plr-hands c) plr) plr-hand)))
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand))
+  ;; print Cribbage struct
+  (print-cribbage c t 1))
 
 ;; HIS-HEELS
 ;; ------------------------------------------
