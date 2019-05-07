@@ -111,12 +111,12 @@
 ;; THIRTY-ONE
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;; OUTPUTS: 2
+;; OUTPUTS: 1
 ;; CONDITION: when the PILE-SUM reaches 31
 
 (defun thirty-one (pile-sum)
   ;; if PILE-SUM == 31
-  (if (equal pile-sum 31) 2 0))
+  (if (equal pile-sum 31) 1 0))
 
 
 ;; N-OF-A-KIND
