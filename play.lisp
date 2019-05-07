@@ -42,6 +42,56 @@
   (print-cribbage c t 1))
 
 
+;; LEGAL-PILE
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: a vector of legal moves for the current player
+
+(defun legal-pile (c)
+  ;; get necessary Cribbage fields
+  (let* ((plr (cribbage-whose-turn? c))
+         (plr-hand (svref (cribbage-plr-hands c) plr))
+         (pile (cribbage-pile c))
+         (moves nil)
+         (num-moves 0))
+    ;; iterate through PLR-HAND to generate possible moves))
+    (dolist (card plr-hand)
+      ;; when CARD is LEGAL-PLAY? add to MOVES and increment NUM-moves
+      (when (legal-play? plr-hand card pile)
+        (push card moves)
+        (incf num-moves)))
+    ;; make array of legal moves when NUM-MOVES > 0
+    (if (> num-moves 0)
+      ;; make the array
+      (make-array num-moves :initial-contents moves)
+      ;; otherwise, vector NIL
+      (vector nil))))
+
+
+;; RANDOM-PILE
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: one of the legal moves available to current player
+
+(defun random-pile (c)
+  ;; get CARDS
+  (let* ((cards (legal-pile c)))
+    ;; select random index from CARDS vector
+    (svref cards (random (length cards)))))
+
+
+;; RANDOM-TO-PILE!
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: the modified Cribbage game
+
+(defun random-to-pile! (c)
+  ;; get CARD
+  (let ((card (random-pile c)))
+    ;; put the CARD on the pile
+    (hand-to-pile! c nil card (cribbage-whose-turn? c))))
+
+
 ;; PILE-SCORE
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game

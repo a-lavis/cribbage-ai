@@ -111,12 +111,12 @@
 ;; RANDOM-TO-CRIB!
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
-;; OUTPUTS: one of the available legal moves
+;; OUTPUTS: the modified Cribbage game
 
 (defun random-to-crib! (c)
+  ;; get 2 cards to put into CRIB
   (let* ((crib (random-crib c)))
-    (format t "1-crib: ~A~%" (first crib))
-    (format t "2-crib: ~A~%" (second crib))
+    ;; put the 2 cards into CRIB
     (hand-to-crib! c nil (first crib) (second crib)
       (cribbage-whose-turn? c))))
 

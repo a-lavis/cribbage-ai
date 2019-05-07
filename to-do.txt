@@ -1,5 +1,5 @@
 Cribbage Implementation:
-- random-to-pile! function
+- check thru random-to-pile!, random-pile, legal-pile functions
 
 Move-Selection Algorithms to Implement (in order):
 - Expectiminimax
