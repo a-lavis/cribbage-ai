@@ -15,9 +15,13 @@
 
 (defun hand-to-pile! (c check-legal? card plr)
   ;; get player's hand
-  (let ((plr-hand (svref (cribbage-plr-hands c) plr)))
+  (let ((plr-hand (svref (cribbage-plr-hands c) plr))
+        (go-plr (switch plr)))
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
     (when (and check-legal? (not (legal-play? plr-hand (cribbage-pile c) card)))
+      ;; call GO-SCORE and add to other player's score, if applicable
+      (incf (svref (cribbage-score c) go-plr)
+            (go-score (cribbage-pile c) plr-hand))
       ;; print error message
       (format t "Illegal play! Potential issues: pile will go over 31 with
         any of your remaining cards, no cards left, not a card.")
@@ -43,13 +47,7 @@
 
 (defun pile-score (c)
   ;; get PLR's score
-  (let* ((plr (cribbage-whose-turn? c))
-         (go-plr (switch plr))
-         (pile (cribbage-pile c)))
-    ;; call GO-SCORE and add to other player's score
-    (setf (svref (cribbage-score c) go-plr)
-      (+ (svref (cribbage-score c) go-plr)
-         (go-score (cribbage-pile c) (svref (cribbage-plr-hands c) plr))))
+  (let* ((pile (cribbage-pile c)))
     ;; accumulate all possible scoring opportunities
     (+
       (his-nobs pile (suit-of (cribbage-cut c)))
@@ -87,13 +85,14 @@
 ;;    is already 31 or would go over
 
 (defun go-score (pile curr-plr-hand)
-  ;; iterate thru CURR-PLR-HAND
-  (dolist (card curr-plr-hand)
-    ;; CARD-VALUE + PILE-SUM < 31
-    (when (<= (+ (card-value card) (pile-sum pile)) 31)
-      (return-from go-score 0)))
-  ;; otherwise have gone through CURR-PLR-HAND and no possibilities
-  1)
+  (let ((score 1))
+    ;; iterate thru CURR-PLR-HAND
+    (dolist (card curr-plr-hand)
+      ;; CARD-VALUE + PILE-SUM < 31
+      (when (<= (+ (card-value card) (pile-sum pile)) 31)
+        (setf score 0)))
+  ;; return calculated score
+    score))
 
 
 ;; FIFTEEN
