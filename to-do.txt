@@ -1,9 +1,7 @@
-Cribbage Implementation to finish:
-
-- last-card situation??  (i think we need it)
+Cribbage Implementation:
+- random-to-pile! function
 
 Move-Selection Algorithms to Implement (in order):
-
 - Expectiminimax
 - Expectiminimax w/ pruning
 (maybe just experiment w/ move ordering instead of MCTS)
