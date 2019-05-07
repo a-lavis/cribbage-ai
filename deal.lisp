@@ -81,11 +81,45 @@
     (setf plr-hand (remove card2 plr-hand))
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
-    ;; change WHOSE-TURN?
-    (toggle-turn! c)
+    ;; change WHOSE-TURN? when CRIB length != 4
+    (when (not (= (length crib) 4)) (toggle-turn! c))
     (setf (svref (cribbage-plr-hands c) plr) plr-hand))
   ;; print Cribbage struct
   (print-cribbage c t 1))
+
+
+;; RANDOM-CRIB
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: one of the legal moves available to current game
+
+(defun random-crib (c)
+  (let* ((card1 nil)
+         (card2 nil)
+         (plr (cribbage-whose-turn? c))
+         (plr-hand (svref (cribbage-plr-hands c) plr)))
+    ;; get random NTH CARD2 from PLR-HAND
+    (setf card1 (nth (random (length plr-hand)) plr-hand))
+    ;; remove CARD1 from PLR-HAND
+    (setf plr-hand (remove card1 plr-hand))
+    ;; get random NTH CARD2 from PLR-HAND
+    (setf card2 (nth (random (length plr-hand)) plr-hand))
+    ;; return list of CARD1, CARD2
+    (list card1 card2)))
+
+
+;; RANDOM-TO-CRIB!
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: one of the available legal moves
+
+(defun random-to-crib! (c)
+  (let* ((crib (random-crib c)))
+    (format t "1-crib: ~A~%" (first crib))
+    (format t "2-crib: ~A~%" (second crib))
+    (hand-to-crib! c nil (first crib) (second crib)
+      (cribbage-whose-turn? c))))
+
 
 ;; HIS-HEELS
 ;; ------------------------------------------
