@@ -31,6 +31,7 @@
   (whose-turn? *player-one*)
   (whose-dealer? *player-one*)
   (plr-hands (vector '() '()))
+  backup-hands
   (crib '())
   (pile '())
   cut)
@@ -143,3 +144,12 @@
 
 (defun pile-sum (pile)
   (apply #'+ (mapcar #'card-value pile)))
+
+;; BACKUP-HANDS
+
+(defun backup-hands (c)
+  (when (= (length (svref (cribbage-plr-hands c) *player-one*))
+           (length (svref (cribbage-plr-hands c) *player-two*))
+           3)
+    ;; save backup of hands
+    (setf (cribbage-backup-hands c) (cribbage-plr-hands c))))

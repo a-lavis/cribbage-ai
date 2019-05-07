@@ -13,17 +13,17 @@
 (defun deal (c)
   ;; generate cards for the ROUND
   (let ((cards-dealt (generate-cards)))
-        ;; assign first five cards to PLR-ONE-HAND
-        (setf (svref (cribbage-plr-hands c) *player-one*)
+    ;; assign first five cards to PLR-ONE-HAND
+    (setf (svref (cribbage-plr-hands c) *player-one*)
           (subseq cards-dealt 0 5))
-        ;; assign second five cards to PLR-TWO-HAND
-        (setf (svref (cribbage-plr-hands c) *player-two*)
+    ;; assign second five cards to PLR-TWO-HAND
+    (setf (svref (cribbage-plr-hands c) *player-two*)
           (subseq cards-dealt 5 10))
-        ;; assign last card to CUT
-          (setf (cribbage-cut c) (first (last cards-dealt))))
+    ;; assign last card to CUT
+    (setf (cribbage-cut c) (first (last cards-dealt))))
   ;; call HIS-HEELS and update CRIBBAGE-SCORE
   (incf (svref (cribbage-score c) (cribbage-whose-dealer? c))
-    (his-heels (cribbage-cut c)))
+        (his-heels (cribbage-cut c)))
   ;; print out updated C
   (print-cribbage c t 1))
 
