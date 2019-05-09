@@ -76,8 +76,12 @@
 (defun random-pile (c)
   ;; get CARDS
   (let* ((cards (legal-pile c)))
-    ;; select random index from CARDS vector
-    (svref cards (random (length cards)))))
+    ;; check if CARDS is empty
+    (if (null cards)
+	;; CARDS is empty, pass on the NIL
+	nil
+      ;; otherwise, select random index from CARDS vector
+      (svref cards (random (length cards))))))
 
 
 ;; RANDOM-TO-PILE!
@@ -88,8 +92,17 @@
 (defun random-to-pile! (c)
   ;; get CARD
   (let ((card (random-pile c)))
-    ;; put the CARD on the pile
-    (hand-to-pile! c nil card (cribbage-whose-turn? c))))
+    ;; check if CARD is NIL
+    (when (not (null card))
+      ;; put the CARD on the pile
+      (hand-to-pile! c nil card (cribbage-whose-turn? c))
+      (return-from random-to-pile! (cribbage-whose-turn? c)))
+    ;; call GO-SCORE if no legal cards produced
+    (incf (svref (cribbage-score c) (cribbage-whose-turn? c))
+	  (go-score (cribbage-pile c)
+		    (svref (cribbage-plr-hands c) (cribbage-whose-turn? c))))
+    ;; change player turn
+    (toggle-turn! c)))
 
 
 ;; PILE-SCORE
@@ -122,6 +135,7 @@
   ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
   (when (and (equal (length pile) 1)
              (equal (suit-of top-card) cut-suit))
+    (format t "His-Nobs!~%")
     ;; return value of this scoring opportunity
     (return-from his-nobs 1)))
   ;; otherwise return 0
@@ -132,7 +146,7 @@
 ;; ------------------------------------------
 ;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
 ;;         CURR-PLR-HAND, the current player's hand
-;; OUTPUTS: 1
+;; OUTPUTS: 1 or 0, whether or not GO will be scored
 ;; CONDITION: when the next player can't play a card because the PILE-SUM
 ;;    is already 31 or would go over
 
@@ -143,7 +157,9 @@
       ;; CARD-VALUE + PILE-SUM < 31
       (when (<= (+ (card-value card) (pile-sum pile)) 31)
         (setf score 0)))
-  ;; return calculated score
+    ;; return calculated score
+    (when (= score 1)
+      (format t "Go!~%"))
     score))
 
 
@@ -155,7 +171,10 @@
 
 (defun fifteen (pile-sum)
   ;; if PILE-SUM == 15
-  (if (equal pile-sum 15) 2 0))
+  (when (equal pile-sum 15) 
+    (format t "Fifteen!~%")
+    (return-from fifteen 2))
+  0)
 
 
 ;; THIRTY-ONE
@@ -166,7 +185,10 @@
 
 (defun thirty-one (pile-sum)
   ;; if PILE-SUM == 31
-  (if (equal pile-sum 31) 1 0))
+  (when (equal pile-sum 31)
+    (format t "Thirty-One!~%")
+    (return-from thirty-one 1))
+  0)
 
 
 ;; N-OF-A-KIND
@@ -177,11 +199,17 @@
 (defun n-of-a-kind (pile)
   (cond
     ;; score a QUADRUPLE
-    ((quadruple? pile) 12)
+   ((quadruple? pile)
+    (format t "Four-of-a-Kind!~%")
+    12)
     ;; score a TRIPLE
-    ((triple? pile) 6)
+   ((triple? pile)
+    (format t "Triple!~%")
+    6)
     ;; score a PAIR
-    ((pair? pile) 2)
+   ((pair? pile)
+    (format t "Pair!~%")
+    2)
     ;; else 0
     (t 0)))
 
@@ -244,14 +272,17 @@
       ;; a RUN of 5
       ((and (succession? sorted-five)
             (equal (length sorted-five) 5))
-        5)
+       (format t "Run of 5!~%")
+       5)
       ;; a RUN of 4
       ((and (succession? sorted-four)
             (equal (length sorted-four) 4))
+       (format t "Run of 4!~%")
         4)
       ;; a RUN of 3
       ((and (succession? sorted-three)
             (equal (length sorted-three) 3))
+       (format t "Run of 3!~%")
         3)
       ;; no RUN
       (t 0))))
