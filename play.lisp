@@ -57,8 +57,8 @@
     ;; iterate through PLR-HAND to generate possible moves))
     (dolist (card plr-hand)
       ;; when CARD is LEGAL-PLAY? add to MOVES and increment NUM-moves
-      (when (legal-play? plr-hand card pile)
-        (setf moves (push card moves))
+      (when (legal-play? plr-hand pile card)
+	(setf moves (cons card moves))
         (incf num-moves)))
     ;; make array of legal moves when NUM-MOVES > 0
     (if (> num-moves 0)
