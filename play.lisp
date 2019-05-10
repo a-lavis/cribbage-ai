@@ -91,18 +91,19 @@
 
 (defun random-to-pile! (c)
   ;; get CARD
-  (let ((card (random-pile c)))
+  (let ((card (random-pile c))
+        (go-plr (switch (cribbage-whose-turn? c))))
     ;; check if CARD is NIL
     (when (not (null card))
       ;; put the CARD on the pile
       (hand-to-pile! c nil card (cribbage-whose-turn? c))
       (return-from random-to-pile! (cribbage-whose-turn? c)))
     ;; call GO-SCORE if no legal cards produced
-    (incf (svref (cribbage-score c) (cribbage-whose-turn? c))
+    (incf (svref (cribbage-score c) go-plr))
 	  (go-score (cribbage-pile c)
-		    (svref (cribbage-plr-hands c) (cribbage-whose-turn? c))))
+		    (svref (cribbage-plr-hands c) go-plr)))
     ;; change player turn
-    (toggle-turn! c)))
+    (toggle-turn! c))
 
 
 ;; PILE-SCORE
@@ -171,7 +172,7 @@
 
 (defun fifteen (pile-sum)
   ;; if PILE-SUM == 15
-  (when (equal pile-sum 15) 
+  (when (equal pile-sum 15)
     (format t "Fifteen!~%")
     (return-from fifteen 2))
   0)
