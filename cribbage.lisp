@@ -31,7 +31,7 @@
   (whose-turn? *player-one*)
   (whose-dealer? *player-one*)
   (plr-hands (vector '() '()))
-  backup-hands
+  (backup-hands (vector '() '()))
   (crib '())
   (pile '())
   cut)

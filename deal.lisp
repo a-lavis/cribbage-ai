@@ -86,7 +86,10 @@
     ;; change WHOSE-TURN?  when CRIB length != 4
     (when (not (= (length crib) 4)) (toggle-turn! c))
     (setf (svref (cribbage-plr-hands c) plr) plr-hand)
-    (setf (cribbage-backup-hands c) (cribbage-plr-hands c))))
+    ;; update BACKUP-HANDS 
+    (dotimes (i 2)
+      (setf (svref (cribbage-backup-hands c) i)
+        (svref (cribbage-plr-hands c) i)))))
 
 
 ;; RANDOM-CRIB
