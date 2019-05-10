@@ -33,13 +33,13 @@
     ;; add CARD to PILE
     (setf (cribbage-pile c) (cons card (cribbage-pile c)))
     ;; update CRIBBAGE-PLR-HANDS
-    (setf (svref (cribbage-plr-hands c) plr) plr-hand)
-    ;; call PILE-SCORE
-    (incf (svref (cribbage-score c) plr) (pile-score c))
-    ;; change WHOSE-TURN?
-    (toggle-turn! c))
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand))
+  ;; call PILE-SCORE
+  (incf (svref (cribbage-score c) plr) (pile-score c))
   ;; print Cribbage struct
-  (print-cribbage c t 1))
+  (print-cribbage c t 1)
+  ;; change WHOSE-TURN?
+  (toggle-turn! c))
 
 
 ;; LEGAL-PILE
