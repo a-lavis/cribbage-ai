@@ -83,9 +83,10 @@
     (setf (cribbage-crib c) crib)
     ;; print Cribbage struct
     (print-cribbage c t 1)
-    ;; change WHOSE-TURN? when CRIB length != 4
+    ;; change WHOSE-TURN?  when CRIB length != 4
     (when (not (= (length crib) 4)) (toggle-turn! c))
-    (setf (svref (cribbage-plr-hands c) plr) plr-hand)))
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand)
+    (setf (cribbage-backup-hands c) (cribbage-plr-hands c))))
 
 
 ;; RANDOM-CRIB
