@@ -14,8 +14,6 @@
 ;; SIDE-EFFECTS: removes CARD from player's hand
 
 (defun hand-to-pile! (c check-legal? card plr)
-  ;; backup hands if necessary
-  (backup-hands c)
   ;; get player's hand
   (let ((plr-hand (svref (cribbage-plr-hands c) plr))
         (go-plr (switch plr)))
