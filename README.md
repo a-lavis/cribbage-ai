@@ -9,10 +9,9 @@ Cribbage playing to 61.  This is the simplest version of Cribbage and is
 preferred by beginners.  There are 6-card versions, as well as 3-player and
 4-player versions.
 
-We have refactored the Expecti-minimax, Expecti-minimax w/ pruning, as well as
-Monte Carlo Tree Search algorithms to work with our implementation of Cribbage.
-We will compare the performances of these various chance-based adversarial
-search algorithms.
+We have refactored the Monte Carlo Tree Search algorithm to work with our
+implementation of Cribbage. We will compare the performance of this
+algorithm against a random player. 
 
 ## The Game
 

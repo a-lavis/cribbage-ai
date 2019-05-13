@@ -172,12 +172,12 @@
     (setf (cribbage-backup-hands c) (cribbage-plr-hands c))))
 
 
-;; MAKE-HASHKEY-FROM-GAME
+;; MAKE-HASH-KEY-FROM-GAME
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game struct
 ;; OUTPUTS: a list of the form  PLR, P1-HAND, P2-HAND, PILE
 
-(defun make-hashkey-from-game (c)
+(defun make-hash-key-from-game (c)
   (let ((plr (cribbage-whose-turn? c))
          (p1-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-one*)) #'<))
          (p2-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-two*)) #'<))
