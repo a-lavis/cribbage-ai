@@ -2,7 +2,7 @@
 ;; AUTHORS: Daniel Melody & Aidan Lavis
 ;; ==========================================
 
-;; Contains the functions related to the DEAL segment of Cribbage
+;; Contains the functions related to the SHOW segment of Cribbage
 
 ;; SHOW
 ;; ------------------------------------------
@@ -89,7 +89,7 @@
                         (count-tuples (rest ranks) (first ranks) (+ 1 counter)))
                        (t
                          (info score counter)
-                         (+ score 
+                         (+ score
                             (count-tuples (rest ranks) (first ranks) 1)))
                        ))))
              (count-tuples (sort (mapcar #'rank-of cards) #'<) -2 1))))
@@ -111,7 +111,7 @@
                                   (+ run-count 1) (cons 1 multi)))
                      (t
                        (info score run-count)
-                       (+ score 
+                       (+ score
                           (count-runs (rest ranks) (first ranks) 1 '(1))))
                      ))))
     (count-runs (sort (mapcar #'rank-of cards) #'<) -2 1 '(1))))
