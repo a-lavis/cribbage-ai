@@ -28,7 +28,6 @@
 
 (defstruct (cribbage (:print-function print-cribbage))
   (score (vector 0 3))   ;;  PLR-2 pegs "three for last"
-  (go-scored? nil)
   (whose-turn? *player-one*)
   (whose-dealer? *player-one*)
   (plr-hands (vector '() '()))
