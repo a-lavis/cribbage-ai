@@ -134,13 +134,13 @@
 	      (when (> c 0)
 		(let ((ugly-term (* c (sqrt (/ (log n)
 					       (svref move-visits i))))))
-		  (if (eq player *black*)
+		  (if (eq player *player-one*)
 		      (incf score ugly-term)
 		    (decf score ugly-term))))
 	      ;; When SCORE is better than best-score-so-far...
-	      (when (or (and (eq player *black*)
+	      (when (or (and (eq player *player-one*)
 			     (> score best-score-so-far))
-			(and (eq player *white*)
+			(and (eq player *player-two*)
 			     (< score best-score-so-far)))
 		;; Update best-score/move-so-far
 		(setf best-score-so-far score)
@@ -193,3 +193,13 @@
 
         ;; After the WHILE... return the accumulated key/move list
         (reverse key-move-acc)))
+
+
+;;  SIM-DEFAULT
+;; ----------------------------------------------
+;;  INPUT:   GAME, a game struct
+;;  OUTPUT:  The result of following the game's default policy
+;;             (domain-dependent method)
+
+(defun sim-default (game)
+  (random-round game))
