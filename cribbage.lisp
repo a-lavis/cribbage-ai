@@ -183,3 +183,33 @@
          (p2-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-two*)) #'<))
          (pile (mapcar #'rank-of (cribbage-pile c))))
     (list plr p1-hand p2-hand pile)))
+
+
+;;  COPY-ARRAY
+;; -------------------------------------------------
+;;  INPUT:   HARRY, a 2-dimensional array
+;;  OUTPUT:  A copy of HARRY
+
+(defun copy-array (harry)
+  (let* ((dims (array-dimensions harry))
+	 (kopy (make-array dims)))
+    (dotimes (c (first dims))
+	(setf (aref kopy c) (aref harry c)))
+  kopy))
+
+
+;; COPY-GAME
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game struct
+;; OUTPUTS: a copy of the Cribbage game
+
+(defun copy-game (c)
+  ;; make the new game struct
+  (make-cribbage :score (copy-array (cribbage-score c))
+		 :whose-turn? (cribbage-whose-turn? c)
+		 :whose-dealer? (cribbage-whose-dealer? c)
+		 :plr-hands (copy-array (cribbage-plr-hands c))
+		 :backup-hands (copy-array (cribbage-backup-hands c))
+		 :crib (cribbage-crib c)
+		 :pile (cribbage-pile c)
+		 :cut (cribbage-cut c)))
