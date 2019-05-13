@@ -20,7 +20,7 @@
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
     (when (and check-legal? (not (legal-play? plr-hand (cribbage-pile c) card)))
       ;; call GO-SCORE and add to other player's score, if applicable
-      (incf (svref (cribbage-score c) go-plr)
+        (incf (svref (cribbage-score c) go-plr)
             (go-score (cribbage-pile c) plr-hand))
       ;; print error message
       (format t "Illegal play! Potential issues: pile will go over 31 with
