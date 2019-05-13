@@ -17,10 +17,7 @@
 (defun play-round (c p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn)
   (cond
     ((not (game-over? c))
-      (let ((p1-hand (svref (cribbage-plr-hands c) 0))
-            (p2-hand (svref (cribbage-plr-hands c) 1))
-            (dlr (cribbage-whose-dealer? c))
-	          (pile (cribbage-pile c))
+      (let ((dlr (cribbage-whose-dealer? c))
             (card nil))
         ;; set turn to DLR
         (setf (cribbage-whose-turn? c) dlr)
@@ -59,7 +56,8 @@
               (setf card nil))))
 
         ;; call SHOW on Cribbage game
-        (show c)))
+        (when (not (game-over? c))
+          (show c))))
     (t
      (format t "Unable to play a round.~%"))))
 
@@ -89,4 +87,13 @@
 
 (defun random-round (c)
   (play-round c #'random-to-crib! #'random-to-pile!
+    #'random-to-crib! #'random-to-pile!))
+
+;; RANDOM-GAME
+;; ------------------------------------------
+;; INPUTS: none
+;; OUTPUTS: the winning player
+
+(defun random-game ()
+  (play-game #'random-to-crib! #'random-to-pile!
     #'random-to-crib! #'random-to-pile!))
