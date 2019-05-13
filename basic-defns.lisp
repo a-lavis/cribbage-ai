@@ -17,6 +17,7 @@
         "deal"
         "play"
         "show"
+	"game"
         ))
 
 
