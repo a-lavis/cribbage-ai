@@ -16,13 +16,15 @@
                                (hand-value cut (svref hands plr)))))
       (hand-score *player-one*)
       (hand-score *player-two*)
-      (format t "~%scoring crib~%")
+      (format t "~%scoring crib  Dealer= ~A~%" (1+ (cribbage-whose-dealer? c)))
       (incf (svref (cribbage-score c) (cribbage-whose-dealer? c))
             (crib-value cut (cribbage-crib c)))
       (format t "~%")
       (print-cribbage c t 1)
       ;; change dealer for next ROUND
       (toggle-dealer! c)
+      ;; reset GO-SCORED?
+      (setf (cribbage-go-scored? c) nil)
       )))
 
 
