@@ -28,8 +28,6 @@
       (print-cribbage c t 1)
       ;; change dealer for next ROUND
       (toggle-dealer! c)
-      ;; reset GO-SCORED?
-      (setf (cribbage-go-scored? c) nil)
       )))
 
 
