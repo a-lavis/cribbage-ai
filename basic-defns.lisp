@@ -18,7 +18,7 @@
         "play"
         "show"
 	      "game"
-        "mcts"
+        "mcts-perfect"
         ))
 
 

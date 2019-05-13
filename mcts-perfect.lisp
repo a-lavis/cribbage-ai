@@ -203,3 +203,78 @@
 
 (defun sim-default (game)
   (random-round game))
+
+
+;;  BACKUP
+;; ---------------------------------------------------
+;;  INPUTS:  HASHY, the hash-table for the MCTS
+;;           KEY-MOVE-ACC, the accumulated list of KEYs and MOVEs
+;;              from a simulation run
+;;           RESULT, the result (from black's perspective) of the
+;;              recently played out simulation
+;;  OUTPUT:  doesn't matter
+;;  SIDE EFFECT:  Updates the relevant nodes in the MC-TREE/HASHY
+
+(defun backup (hashy key-move-acc result)
+  (while key-move-acc
+    (let* ((key (pop key-move-acc))
+	         (nodey (gethash key hashy))
+  	       (mv-index (pop key-move-acc))
+  	       (visitz (mc-node-veck-visits nodey))
+  	       (scorez (mc-node-veck-scores nodey)))
+      ;; increment node num visits
+      (incf (mc-node-num-visits nodey))
+      ;; increment num times did this move from this state
+      (incf (svref visitz mv-index))
+      ;; increment the SCORE
+      (incf (svref scorez mv-index)
+  	   (/ (- result (svref scorez mv-index))
+          (svref visitz mv-index))))))
+
+
+          ;;  UCT-SEARCH
+          ;; ---------------------------------
+          ;;  INPUTS:  ORIG-GAME, a game struct
+          ;;           NUM-SIMS, a positive integer
+          ;;           C, the exploration/exploitation parameter
+          ;;  OUTPUT:  Best move from that state determined by
+          ;;             doing *NUM-SIMS* simulations of MCTS.
+
+          (defparameter *verbose* t) ;; a global parameter used to ensure/suppress printing of stats
+
+          (defun uct-search
+              (orig-game num-sims c)
+            ;; Want to use COPY of GAME struct for simulations...
+            ;; That way, can reset game struct before each simulation...
+            (let* ((tree (new-mc-tree orig-game))
+          	 (hashy (mc-tree-hashy tree))
+          	 ;;(player (whose-turn orig-game))
+          	 )
+              (dotimes (i num-sims)
+                (let* (;; Work with a COPY of the original game struct
+          	     (game (copy-game orig-game))
+          	     ;; Phase 1:  SIM-TREE Destructively modifies game
+          	     (key-move-acc (sim-tree game tree c))
+          	     ;; Phase 2:  SIM-DEFAULT returns result
+          	     (playout-result (sim-default game)))
+          	;; Finally, backup the results
+          	(backup hashy key-move-acc playout-result)))
+              ;; Select the best move (using c = 0 because we are not exploring anymore)
+              (let* ((rootie (get-root-node tree))
+          	   (mv-index (select-move rootie 0))
+          	   (move (svref (mc-node-veck-moves rootie) mv-index))
+          	   (scores (mc-node-veck-scores rootie))
+          	   (score (svref scores mv-index)))
+                (format t ".")
+                (when *verbose*
+          	;; Display some stats along with the best move
+          	(format t "Best score: ~5,3F score veck: " score)
+          	(dotimes (i (length scores))
+          	  (format t "~5,3F, " (svref scores i)))
+          	(format t "~%")
+          	(format t "Visits veck: ")
+          	(dotimes (i (length scores))
+          	  (format t "~A " (svref (mc-node-veck-visits rootie) i)))
+          	(format t "~%"))
+                ;; Output the move
+                move)))
