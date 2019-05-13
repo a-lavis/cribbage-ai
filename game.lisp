@@ -77,3 +77,14 @@
       (play-round c p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn))
     ;; return who won this game
     (who-won? c)))
+
+
+;; RANDOM-ROUND
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: none
+;; SIDE EFFECTS: plays a round of Cribbage with all random functions
+
+(defun random-round (c)
+  (play-round c #'random-to-crib! #'random-to-pile!
+    #'random-to-crib! #'random-to-pile!))
