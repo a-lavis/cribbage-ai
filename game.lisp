@@ -9,6 +9,8 @@
 ;; INPUTS: C, a Cribbage game
 ;;         TO-CRIB, a fxn for deciding cards given to CRIB
 ;;         TO-PILE, a fxn for deciding cards given to PILE
+;; OUTPUTS: none
+;; SIDE EFFECTS: plays a round of Cribbage and updates Cribbage struct
 
 (defun play-round (c crib-fn pile-fn)
   (cond
@@ -28,3 +30,19 @@
           (funcall pile-fn c))))
     (t
       (format t "Unable to play a round.~%"))))
+
+
+;; PLAY-GAME
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;;         CRIB-FN, a function governing hand-to-crib! choices
+;;         PILE-FN, a function governing hand-to-pile! choices
+;; OUTPUTS: none
+;; SIDE EFFECTS: plays a game of Cribbage
+
+(defun play-game (c crib-fn pile-fn)
+  ;; PLAY-ROUND while NOT GAME-OVER?
+  (while (not (game-over? c))
+    (play-round c crib-fn pile-fn))
+  ;; return who won
+  (format t "Congratulations, Player ~A~%" (who-won? c)))
