@@ -8,6 +8,9 @@
 ;; ------------------------------------------
 
 (defun show (c)
+  (let ((plr (cribbage-whose-turn? c)))
+    (format t "one for last: player ~A gets 1 points~%" (1+ plr))
+    (incf (svref (cribbage-score c) plr)))
   (let ((cut (cribbage-cut c))
         (hands (cribbage-backup-hands c)))
     (labels ((hand-score (plr)
