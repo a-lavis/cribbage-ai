@@ -11,6 +11,9 @@
 ;; SIDE EFFECTS: updates the hand lists in C, ie. PLR-ONE-HAND, PLR-TWO-HAND
 
 (defun deal (c)
+  ;; clear CRIB and PILE
+  (setf (cribbage-crib c) '())
+  (setf (cribbage-pile c) '())
   ;; generate cards for the ROUND
   (let ((cards-dealt (generate-cards)))
     ;; assign first five cards to PLR-ONE-HAND
@@ -86,7 +89,7 @@
     (print-cribbage c t 1)
     ;; change WHOSE-TURN?  when CRIB length != 4
     (when (not (= (length crib) 4)) (toggle-turn! c))
-    ;; update BACKUP-HANDS 
+    ;; update BACKUP-HANDS
     (dotimes (i 2)
       (setf (svref (cribbage-backup-hands c) i)
         (svref (cribbage-plr-hands c) i)))))
@@ -124,6 +127,7 @@
     (hand-to-crib! c nil (first crib) (second crib)
       (cribbage-whose-turn? c))))
 
+;; ============================================================
 
 ;; HIS-HEELS
 ;; ------------------------------------------

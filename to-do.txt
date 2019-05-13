@@ -1,8 +1,9 @@
 Cribbage Implementation:
  - edge case where a player can play multiple cards in a row (staying under 31),
-    while the other player can't make a move (achieve by manipulating toggle-turn!
+    while the other player can't make a move (achieve by manipulating
+    toggle-turn!
     in hand-to-pile! fxn
-    
+
 Move-Selection Algorithms to Implement (in order):
 - Expectiminimax
 - Expectiminimax w/ pruning

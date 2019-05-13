@@ -15,13 +15,9 @@
 
 (defun hand-to-pile! (c check-legal? card plr)
   ;; get player's hand
-  (let ((plr-hand (svref (cribbage-plr-hands c) plr))
-        (go-plr (switch plr)))
+  (let ((plr-hand (svref (cribbage-plr-hands c) plr)))
     ;; check if CARD is legal (ie. in hand)... if CHECK-LEGAL? == T
     (when (and check-legal? (not (legal-play? plr-hand (cribbage-pile c) card)))
-      ;; call GO-SCORE and add to other player's score, if applicable
-      (incf (svref (cribbage-score c) go-plr)
-            (go-score (cribbage-pile c) plr-hand))
       ;; print error message
       (format t "Illegal play! Potential issues: pile will go over 31 with
         any of your remaining cards, no cards left, not a card.")
@@ -85,23 +81,17 @@
 ;; RANDOM-TO-PILE!
 ;; ------------------------------------------
 ;; INPUTS: C, a Cribbage game
-;; OUTPUTS: the modified Cribbage game
+;; OUTPUTS: none
+;; SIDE EFFECTS: updates Cribbage game struct
 
 (defun random-to-pile! (c)
   ;; get CARD
-  (let ((card (random-pile c))
-        (go-plr (switch (cribbage-whose-turn? c))))
+  (let ((card (random-pile c)))
     ;; check if CARD is NIL
-    (when (not (null card))
+    (when (and (not (game-over? c))
+              (not (null card)))
       ;; put the CARD on the pile
-      (hand-to-pile! c nil card (cribbage-whose-turn? c))
-      (return-from random-to-pile! (cribbage-whose-turn? c)))
-    ;; call GO-SCORE if no legal cards produced
-    (incf (svref (cribbage-score c) go-plr))
-	  (go-score (cribbage-pile c)
-		    (svref (cribbage-plr-hands c) go-plr)))
-    ;; change player turn
-    (toggle-turn! c))
+      (hand-to-pile! c nil card (cribbage-whose-turn? c)))))
 
 
 ;; PILE-SCORE
@@ -139,27 +129,6 @@
     (return-from his-nobs 1)))
   ;; otherwise return 0
   0)
-
-
-;; GO-SCORE  -- scored retroactively
-;; ------------------------------------------
-;; INPUTS: PILE-SUM, the sum of the cards placed in the PILE
-;;         CURR-PLR-HAND, the current player's hand
-;; OUTPUTS: 1 or 0, whether or not GO will be scored
-;; CONDITION: when the next player can't play a card because the PILE-SUM
-;;    is already 31 or would go over
-
-(defun go-score (pile curr-plr-hand)
-  (let ((score 1))
-    ;; iterate thru CURR-PLR-HAND
-    (dolist (card curr-plr-hand)
-      ;; CARD-VALUE + PILE-SUM < 31
-      (when (<= (+ (card-value card) (pile-sum pile)) 31)
-        (setf score 0)))
-    ;; return calculated score
-    (when (= score 1)
-      (format t "Go!~%"))
-    score))
 
 
 ;; FIFTEEN

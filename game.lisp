@@ -20,35 +20,46 @@
       (let ((p1-hand (svref (cribbage-plr-hands c) 0))
             (p2-hand (svref (cribbage-plr-hands c) 1))
             (dlr (cribbage-whose-dealer? c))
-	    (pile (cribbage-pile c)))
-	;; DEAL the cards
-	(format t "DEAL~%")
-	(deal c)
-        ;; DEALER's hand-to-crib!
-	(format t "DLR to crib.~%")
-        (if (equal dlr *player-one*)
-	    (funcall p1-crib-fn c)
-	  (funcall p2-crib-fn c))
-	;; NON-DEALER's hand-to-crib!
-	(format t "NON-DLR to crib.~%")
-        (if (equal dlr *player-one*)
-	    (funcall p2-crib-fn c)
-	  (funcall p1-crib-fn c))
-        ;; call hand-to-pile! as many times as necessary/possible
-        (let ((p1-legals '())
-	      (p2-legals '()))
-	  (while (or (dolist (card p1-hand p1-legals)
-		       (push (legal-play? p1-hand pile card) p1-legals))
-		     (dolist (card p2-hand p2-legals)
-		       (push (legal-play? p2-hand pile card) p2-legals)))
-	    (format t "Player ~A to pile.~%" (1+ (cribbage-whose-turn? c)))
-	    ;; clear P1-LEGALS and P2-LEGALS
-	    (setf p1-legals '())
-	    (setf p2-legals '())
-	    ;; call correct hand-to-pile! func
-	    (if (equal (cribbage-whose-turn? c) *player-one*)
-		(funcall p1-pile-fn c)
-	      (funcall p2-pile-fn c))))))
+	          (pile (cribbage-pile c))
+            (card nil))
+        ;; set turn to DLR
+        (setf (cribbage-whose-turn? c) dlr)
+         ;; DEAL the cards
+	       (format t "DEAL~%")
+	       (deal c)
+         ;; give cards to CRIB
+         (cond
+           ;; DLR = Player One
+           ((equal dlr *player-one*)
+             (format t "DLR to crib.~%")
+             (funcall p1-crib-fn c)
+             (format t "NON-DLR to crib.~%")
+	           (funcall p2-crib-fn c)
+             ;; set first CARD selection to P2-PILE-FN
+             (setf card (funcall p2-pile-fn c)))
+           ((equal dlr *player-two*)
+             (format t "DLR to crib.~%")
+             (funcall p2-crib-fn c)
+             (format t "NON-DLR to crib.~%")
+	           (funcall p1-crib-fn c)
+             ;; set first CARD selection to P1-PILE-FN
+             (setf card (funcall p1-pile-fn c))))
+
+         ;; the PLAY, call hand-to-pile! as many times as necessary/possible
+         (while (not (null card))
+           (cond
+             ;; call P1-PILE-FN
+             ((= (cribbage-whose-turn? c) *player-one*)
+              (setf card (funcall p1-pile-fn c)))
+            ;; call P2-PILE-FN
+            ((= (cribbage-whose-turn? c) *player-two*)
+              (setf card (funcall p2-pile-fn c)))
+            ;; default, assign CARD to NIL to ward off infinite loop
+            (t
+              (setf card nil))))
+
+        ;; call SHOW on Cribbage game
+        (show c)))
     (t
      (format t "Unable to play a round.~%"))))
 
@@ -68,3 +79,14 @@
       (play-round c p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn))
     ;; return who won this game
     (who-won? c)))
+
+
+;; RANDOM-ROUND
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: none
+;; SIDE EFFECTS: plays a round of Cribbage with all random functions
+
+(defun random-round (c)
+  (play-round c #'random-to-crib! #'random-to-pile!
+    #'random-to-crib! #'random-to-pile!))
