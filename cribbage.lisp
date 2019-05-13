@@ -57,7 +57,7 @@
   (when (cribbage-cut c)
     (format str "Cut: ~A   " (card->string (cribbage-cut c))))
   (format str "Crib: ~A   " (mapcar #'card->string (cribbage-crib c)))
-  (format str "Pile: ~A~%" (mapcar #'card->string (cribbage-pile c))))
+  (format str "Pile: ~A~%~%" (mapcar #'card->string (cribbage-pile c))))
 
 
 ;; TOGGLE-TURN!

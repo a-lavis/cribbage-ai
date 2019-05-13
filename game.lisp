@@ -22,25 +22,35 @@
             (dlr (cribbage-whose-dealer? c))
 	    (pile (cribbage-pile c)))
 	;; DEAL the cards
+	(format t "DEAL~%")
 	(deal c)
         ;; DEALER's hand-to-crib!
+	(format t "DLR to crib.~%")
         (if (equal dlr *player-one*)
 	    (funcall p1-crib-fn c)
 	  (funcall p2-crib-fn c))
-        ;; NON-DEALER's hand-to-crib!
+	;; NON-DEALER's hand-to-crib!
+	(format t "NON-DLR to crib.~%")
         (if (equal dlr *player-one*)
 	    (funcall p2-crib-fn c)
 	  (funcall p1-crib-fn c))
         ;; call hand-to-pile! as many times as necessary/possible
-        (while (or (dolist (card p1-hand)
-		     (legal-play? p1-hand pile card))
-		   (dolist (card p2-hand)
-		     (legal-play? p2-hand pile card)))
-          (if (equal (cribbage-whose-turn? c) *player-one*)
-	      (funcall p1-pile-fn c)
-	    (funcall p2-pile-fn c)))))
+        (let ((p1-legals '())
+	      (p2-legals '()))
+	  (while (or (dolist (card p1-hand p1-legals)
+		       (push (legal-play? p1-hand pile card) p1-legals))
+		     (dolist (card p2-hand p2-legals)
+		       (push (legal-play? p2-hand pile card) p2-legals)))
+	    (format t "Player ~A to pile.~%" (1+ (cribbage-whose-turn? c)))
+	    ;; clear P1-LEGALS and P2-LEGALS
+	    (setf p1-legals '())
+	    (setf p2-legals '())
+	    ;; call correct hand-to-pile! func
+	    (if (equal (cribbage-whose-turn? c) *player-one*)
+		(funcall p1-pile-fn c)
+	      (funcall p2-pile-fn c))))))
     (t
-      (format t "Unable to play a round.~%"))))
+     (format t "Unable to play a round.~%"))))
 
 
 ;; PLAY-GAME

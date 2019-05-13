@@ -81,11 +81,11 @@
     (setf plr-hand (remove card2 plr-hand))
     ;; update CRIBBAGE FIELDS
     (setf (cribbage-crib c) crib)
+    (setf (svref (cribbage-plr-hands c) plr) plr-hand)
     ;; print Cribbage struct
     (print-cribbage c t 1)
     ;; change WHOSE-TURN?  when CRIB length != 4
     (when (not (= (length crib) 4)) (toggle-turn! c))
-    (setf (svref (cribbage-plr-hands c) plr) plr-hand)
     ;; update BACKUP-HANDS 
     (dotimes (i 2)
       (setf (svref (cribbage-backup-hands c) i)
