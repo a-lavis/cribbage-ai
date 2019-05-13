@@ -163,10 +163,23 @@
   (apply #'+ (mapcar #'card-value pile)))
 
 ;; BACKUP-HANDS
-
+;; ------------------------------------------
 (defun backup-hands (c)
   (when (= (length (svref (cribbage-plr-hands c) *player-one*))
            (length (svref (cribbage-plr-hands c) *player-two*))
            3)
     ;; save backup of hands
     (setf (cribbage-backup-hands c) (cribbage-plr-hands c))))
+
+
+;; MAKE-HASHKEY-FROM-GAME
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game struct
+;; OUTPUTS: a list of the form  PLR, P1-HAND, P2-HAND, PILE
+
+(defun make-hashkey-from-game (c)
+  (let ((plr (cribbage-whose-turn? c))
+         (p1-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-one*)) #'<))
+         (p2-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-two*)) #'<))
+         (pile (mapcar #'rank-of (cribbage-pile c))))
+    (list plr p1-hand p2-hand pile)))
