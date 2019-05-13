@@ -115,7 +115,7 @@
 	            (move-visits (mc-node-veck-visits nodey))
 	            (move-scores (mc-node-veck-scores nodey))
 	            (best-move-so-far nil)
-	            (best-score-so-far (if (eq player (switch dlr))         
+	            (best-score-so-far (if (eq player (switch dlr))
 				                             *neg-inf*
 				                             *pos-inf*)))
 	(dotimes (i num-moves)
@@ -149,3 +149,48 @@
 	(if best-move-so-far
 	    best-move-so-far
 	  (random num-moves)))))))
+
+
+;;  SIM-TREE
+;; --------------------------------------
+;;  INPUTS:  GAME, a game struct
+;;           TREE, an MC-TREE struct
+    ;;           C, the exploration/exploitation constant
+    ;;  OUTPUT:  A list of the form (state0 move0 state1 move1 ... statek movek)
+    ;;    where each state_i is a key into the hashtable, and each move_i
+    ;;    is an index into the MOVES vector of the node assoc with state_i.
+
+    (defun sim-tree
+        (game tree c)
+      (let (;; KEY-MOVE-ACC:  accumulator of KEYs and MOVEs
+    	(key-move-acc nil)
+    	(hashy (mc-tree-hashy tree)))
+        (while (not (game-over? game))
+          (let* (;; KEY:  Hash key for current state of game
+    	     (key (make-hash-key-from-game game))
+    	     ;; NODEY:  The MC-NODE corresponding to KEY (or NIL if not in tree)
+    	     (nodey (gethash key hashy)))
+    	;; Case 1:  When key not yet in tree...
+    	(when (null nodey)
+    	  ;; Create new node and insert it into tree
+    	  (setf nodey (insert-new-node game tree key))
+    	  (let* ((mv-index (select-move nodey c))
+    		 (move-veck (mc-node-veck-moves nodey))
+    		 (move (svref move-veck mv-index)))
+    	    (apply #'do-move! game nil move)
+    	    (push key key-move-acc)
+    	    (push mv-index key-move-acc)
+    	    ;; return the accumulator prepended with selected MOVE
+    	    ;; and KEY for current state
+    	    (return-from sim-tree (reverse key-move-acc))))
+
+    	;; Case 2:  Key already in tree!
+    	(let* ((mv-index (select-move nodey c))
+    	       (move-veck (mc-node-veck-moves nodey))
+    	       (move (svref move-veck mv-index)))
+    	  (apply #'do-move! game nil move)
+    	  (push key key-move-acc)
+    	  (push mv-index key-move-acc))))
+
+        ;; After the WHILE... return the accumulated key/move list
+        (reverse key-move-acc)))
