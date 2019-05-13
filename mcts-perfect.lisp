@@ -248,6 +248,7 @@
   ;; That way, can reset game struct before each simulation...
   (let* ((tree (new-mc-tree orig-game))
          (hashy (mc-tree-hashy tree))
+	 (dlr (cribbage-whose-dealer? orig-game))
          ;;(player (whose-turn orig-game))
          )
     (dotimes (i num-sims)
@@ -261,7 +262,7 @@
         (backup hashy key-move-acc playout-result)))
     ;; Select the best move (using c = 0 because we are not exploring anymore)
     (let* ((rootie (get-root-node tree))
-           (mv-index (select-move rootie 0))
+           (mv-index (select-move rootie 0 dlr))
            (move (svref (mc-node-veck-moves rootie) mv-index))
            (scores (mc-node-veck-scores rootie))
            (score (svref scores mv-index)))
