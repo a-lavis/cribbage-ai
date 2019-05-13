@@ -97,3 +97,9 @@
 (defun random-game ()
   (play-game #'random-to-crib! #'random-to-pile!
     #'random-to-crib! #'random-to-pile!))
+
+;; PI-VS-RANDOM
+
+(defun pi-vs-random ()
+  (play-game #'random-to-crib! #'pi-mcts-to-pile!
+             #'random-to-crib! #'random-to-pile!))
