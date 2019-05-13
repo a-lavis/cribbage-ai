@@ -10,8 +10,8 @@ preferred by beginners.  There are 6-card versions, as well as 3-player and
 4-player versions.
 
 We have refactored the Monte Carlo Tree Search algorithm to work with our
-implementation of Cribbage. We will compare the performance of this
-algorithm against a random player. 
+implementation of Cribbage. We will compare the performance of a perfect
+information version, an imperfect information version, and a random player. 
 
 ## The Game
 

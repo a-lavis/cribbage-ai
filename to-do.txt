@@ -1,5 +1,3 @@
-Cribbage Implementation:
-
 Move-Selection Algorithms to Implement (in order):
 - Monte Carlo for hand-to-pile!
 - heuristic fxn for hand-to-crib!
