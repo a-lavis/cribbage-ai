@@ -137,6 +137,23 @@
     (or (>= p-one-score 61) (>= p-two-score 61))))
 
 
+;; WHO-WON?
+;; -------------------------------------------
+;; INPUTS: C, a Cribbage game
+;; OUTPUTS: the name of the player who won, ie. (1 or 2)
+
+(defun who-won? (c)
+  ;; return who won when game is over
+  (when (game-over? c)
+    (let* ((p1-score (svref (cribbage-score c) *player-one*))
+	   (p2-score (svref (cribbage-score c) *player-two*))
+	   (max-score (max p1-score p2-score))
+	   (winning-plr (position max-score (cribbage-score c))))
+      (return-from who-won? (+ 1 winning-plr))))
+    ;; otherwise, say that game is NOT over
+    (format t "Keep playing! It ain't over 'til it's over.~%"))
+
+
 ;; PILE-SUM
 ;; ------------------------------------------
 ;; INPUTS: PILE, the card pile
