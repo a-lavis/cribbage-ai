@@ -44,10 +44,13 @@
 
          ;; the PLAY, call hand-to-pile! as many times as necessary/possible
 	       (while (or (member t (dolist (card p1-hand p1-legals)
-		                  (push (legal-play? p1-hand pile card) p1-legals)))
-		                (member t (dolist (card p2-hand p2-legals)
-		                  (push (legal-play? p2-hand pile card) p2-legals))))
-	         (format t "Player ~A to pile.~%" (1+ (cribbage-whose-turn? c)))
+		                        (push (legal-play? p1-hand pile card) p1-legals)))
+		                     (member t (dolist (card p2-hand p2-legals)
+		                       (push (legal-play? p2-hand pile card) p2-legals))))
+           ;; return NIL when game is over
+           (when (game-over? c)
+             (return-from play-round nil))
+           (format t "Player ~A to pile.~%" (1+ (cribbage-whose-turn? c)))
 	         ;; clear P1-LEGALS and P2-LEGALS
 	         (setf p1-legals '())
 	         (setf p2-legals '())
