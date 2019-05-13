@@ -11,6 +11,9 @@
 ;; SIDE EFFECTS: updates the hand lists in C, ie. PLR-ONE-HAND, PLR-TWO-HAND
 
 (defun deal (c)
+  ;; clear CRIB and PILE
+  (setf (cribbage-crib c) '())
+  (setf (cribbage-pile c) '())
   ;; generate cards for the ROUND
   (let ((cards-dealt (generate-cards)))
     ;; assign first five cards to PLR-ONE-HAND
