@@ -21,6 +21,8 @@
             (crib-value cut (cribbage-crib c)))
       (format t "~%")
       (print-cribbage c t 1)
+      ;; change dealer for next ROUND
+      (toggle-dealer! c)
       )))
 
 
