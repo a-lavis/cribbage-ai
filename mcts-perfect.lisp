@@ -256,6 +256,7 @@
 	 ;;(player (whose-turn orig-game))
          )
     (dotimes (i num-sims)
+      ;;(format t " NEW SIM")
       (let* (;; Work with a COPY of the original game struct
              (game (copy-game orig-game))
 	     ;; Phase 1:  SIM-TREE Destructively modifies game
@@ -282,4 +283,5 @@
           (format t "~A " (svref (mc-node-veck-visits rootie) i)))
         (format t "~%"))
       ;; Output the move
+      (format t "move: ~A~%" move)
       move)))

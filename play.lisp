@@ -124,7 +124,7 @@
   ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
   (when (and (equal (length pile) 1)
              (equal (suit-of top-card) cut-suit))
-    (format t "His-Nobs!~%")
+    ;(format t "His-Nobs!~%")
     ;; return value of this scoring opportunity
     (return-from his-nobs 1)))
   ;; otherwise return 0
@@ -140,7 +140,7 @@
 (defun fifteen (pile-sum)
   ;; if PILE-SUM == 15
   (when (equal pile-sum 15)
-    (format t "Fifteen!~%")
+    ;(format t "Fifteen!~%")
     (return-from fifteen 2))
   0)
 
@@ -154,7 +154,7 @@
 (defun thirty-one (pile-sum)
   ;; if PILE-SUM == 31
   (when (equal pile-sum 31)
-    (format t "Thirty-One!~%")
+    ;(format t "Thirty-One!~%")
     (return-from thirty-one 1))
   0)
 
@@ -168,15 +168,15 @@
   (cond
     ;; score a QUADRUPLE
    ((quadruple? pile)
-    (format t "Four-of-a-Kind!~%")
+    ;(format t "Four-of-a-Kind!~%")
     12)
     ;; score a TRIPLE
    ((triple? pile)
-    (format t "Triple!~%")
+    ;(format t "Triple!~%")
     6)
     ;; score a PAIR
    ((pair? pile)
-    (format t "Pair!~%")
+    ;(format t "Pair!~%")
     2)
     ;; else 0
     (t 0)))
@@ -240,17 +240,17 @@
       ;; a RUN of 5
       ((and (succession? sorted-five)
             (equal (length sorted-five) 5))
-       (format t "Run of 5!~%")
+       ;(format t "Run of 5!~%")
        5)
       ;; a RUN of 4
       ((and (succession? sorted-four)
             (equal (length sorted-four) 4))
-       (format t "Run of 4!~%")
+       ;(format t "Run of 4!~%")
         4)
       ;; a RUN of 3
       ((and (succession? sorted-three)
             (equal (length sorted-three) 3))
-       (format t "Run of 3!~%")
+       ;(format t "Run of 3!~%")
         3)
       ;; no RUN
       (t 0))))

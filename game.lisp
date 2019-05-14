@@ -102,7 +102,12 @@
   (when (not (= (length (cribbage-crib c)) 4))
     (return-from random-do-pile 'error))
   ;; Put cards in the pile until you can't anymore.
-  (while (random-to-pile! c)))
+  (let* ((card (random-to-pile! c))
+         (last-card card))
+    (while (or card last-card)
+           (setf last-card card)
+           (setf card (random-to-pile! c)))))
+         
        
 
 ;; RANDOM-GAME
@@ -118,7 +123,7 @@
 ;; PI-MCTS-TO-PILE!
 
 (defun pi-mcts-to-pile! (c)
-  (uct-search c 100 2))
+  (hand-to-pile! c nil (uct-search c 1 2) (cribbage-whose-turn? c)))
 
 
 ;; PR-ROUND
