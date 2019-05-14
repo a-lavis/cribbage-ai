@@ -93,10 +93,6 @@
       ;; put the CARD on the pile
       (hand-to-pile! c nil card (cribbage-whose-turn? c)))))
 
-;; PI-MCTS-TO-PILE!
-
-(defun pi-mcts-to-pile! (c)
-  (uct-search c 100 2))
 
 ;; PILE-SCORE
 ;; ------------------------------------------

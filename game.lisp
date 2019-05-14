@@ -98,6 +98,13 @@
   (play-game #'random-to-crib! #'random-to-pile!
     #'random-to-crib! #'random-to-pile!))
 
+
+;; PI-MCTS-TO-PILE!
+
+(defun pi-mcts-to-pile! (c)
+  (uct-search c 100 2))
+
+
 ;; PI-VS-RANDOM
 
 (defun pi-vs-random ()
