@@ -59,7 +59,13 @@
 ;;           from GAME.
 
 (defun new-mc-tree (game)
-  (make-mc-tree :root-key (make-hash-key-from-game game)))
+  ;; make ROOT-KEY and MC-TREE struct
+  (let* ((root-key-hash (make-hash-key-from-game game))
+	 (tree (make-mc-tree :root-key root-key-hash)))
+    ;; add ROOT-KEY to HASHY
+    (insert-new-node game tree root-key-hash)
+    ;; return tree
+    tree))
 
 
 ;;  INSERT-NEW-NODE
