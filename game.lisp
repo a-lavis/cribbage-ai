@@ -87,7 +87,28 @@
 
 (defun random-round (c)
   (play-round c #'random-to-crib! #'random-to-pile!
-    #'random-to-crib! #'random-to-pile!))
+	      #'random-to-crib! #'random-to-pile!))
+
+
+;; RANDOM-DO-PILE
+;; ------------------------------------------
+;; INPUTS: C, a Cribbage game (after hands have gone to Crib!)
+;; OUTPUTS: none
+
+(defun random-do-pile (c)
+  ;; check for legal CRIB
+  (when (not (= (length (cribbage-crib c)) 4))
+    (return-from random-do-pile nil))
+  ;; generate first random card
+  (let ((card (random-to-pile! c)))
+    ;; CRIB is legal, continue with hand-to-pile! iteration
+    (while (not (null card))
+      ;; call RANDOM-TO-PILE!
+      (setf card (random-to-pile! c))))
+  ;; call SHOW function
+  (when (not (game-over? c))
+    (show c)))
+       
 
 ;; RANDOM-GAME
 ;; ------------------------------------------

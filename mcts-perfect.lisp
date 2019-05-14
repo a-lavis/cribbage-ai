@@ -198,12 +198,43 @@
 ;;  SIM-DEFAULT
 ;; ----------------------------------------------
 ;;  INPUT:   GAME, a game struct
-;;  OUTPUT:  The result of following the game's default policy
-;;             (domain-dependent method)
+;;  OUTPUT:  an evaluation of the win/loss record of the round played
+;;  NOTE: GAME must have a full CRIB for RANDOM-DO-PILE to work
+;;    we are only exploring the PLAY portion of the game with this
+;;    MCTS implementation
 
 (defun sim-default (game)
-  (random-round game))
-
+  (let ((p1-score-prev (svref (cribbage-score game) *player-one*))
+	(p2-score-prev (svref (cribbage-score game) *player-two*)))
+    ;; play out the round
+    (random-do-pile game)
+    ;; get players' scores
+    (let* ((p1-score (svref (cribbage-score game) *player-one*))
+	   (p2-score (svref (cribbage-score game) *player-two*))
+	   (p1-diff (- p1-score p1-score-prev))
+	   (p2-diff (- p2-score p2-score-prev)))
+      ;; determine who won the round
+      (cond
+       ;; PLAYER-ONE won && NOT the dealer
+       ((and (not (= (cribbage-whose-dealer? game) *player-one*))
+	     (> p1-diff p2-diff))
+	;; return some value  ***********************************
+	10)   
+       ;; PLAYER-ONE won (is the dealer
+       ((and (= (cribbage-whose-dealer? game) *player-one*)
+	     (> p1-diff p2-diff))
+	;; return some value ***********************************
+	5)
+       ;; PLAYER-TWO won && is dealer
+       ((and (= (cribbage-whose-dealer? game) *player-two*)
+	     (> p2-diff p1-diff))
+	;; return some value ***********************************
+	-5)
+       ;; PLAYER-TWO won ** is NOT dealer
+       (t
+	;; return some value ***********************************
+	-10)))))
+   
 
 ;;  BACKUP
 ;; ---------------------------------------------------
@@ -234,7 +265,7 @@
 
 ;;  UCT-SEARCH
 ;; ---------------------------------
-;;  INPUTS:  ORIG-GAME, a game struct
+;;  INPUTS:  ORIG-GAME, a game struct w/ fully constructed CRIB
 ;;           NUM-SIMS, a positive integer
 ;;           C, the exploration/exploitation parameter
 ;;  OUTPUT:  Best move from that state determined by
@@ -242,23 +273,22 @@
 
 (defparameter *verbose* t) ;; a global parameter used to ensure/suppress printing of stats
 
-(defun uct-search
-  (orig-game num-sims c)
+(defun uct-search (orig-game num-sims c)
   ;; Want to use COPY of GAME struct for simulations...
   ;; That way, can reset game struct before each simulation...
   (let* ((tree (new-mc-tree orig-game))
          (hashy (mc-tree-hashy tree))
 	 (dlr (cribbage-whose-dealer? orig-game))
-         ;;(player (whose-turn orig-game))
+	 ;;(player (whose-turn orig-game))
          )
     (dotimes (i num-sims)
       (let* (;; Work with a COPY of the original game struct
              (game (copy-game orig-game))
-             ;; Phase 1:  SIM-TREE Destructively modifies game
+	     ;; Phase 1:  SIM-TREE Destructively modifies game
              (key-move-acc (sim-tree game tree c))
-             ;; Phase 2:  SIM-DEFAULT returns result
+	     ;; Phase 2:  SIM-DEFAULT returns result
              (playout-result (sim-default game)))
-        ;; Finally, backup the results
+	;; Finally, backup the results
         (backup hashy key-move-acc playout-result)))
     ;; Select the best move (using c = 0 because we are not exploring anymore)
     (let* ((rootie (get-root-node tree))
