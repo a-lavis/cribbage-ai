@@ -12,6 +12,10 @@ Option 0: Specialized game play
     - takes in a game instance and operates MCTS for the PLAY portion of a
     single round
 
+Option 0.5: The preferred option
+  $ (avg-game-wins times)
+    - plays number of TIMES against a random-player and returns the results
+
 Option 1: Straight-up game play
   $ (play-game p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn)  
     - because this game has two separate decision points, we need to give

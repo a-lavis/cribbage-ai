@@ -46,6 +46,24 @@ Rules from https://cardgames.io/Cribbage/#rules
 > Challenges
 
 Implementing Cribbage was made difficult by the two distinct choice points and
-the three different 
+the three different segments of the game.  These all required different data
+structure fields.  Additionally, there were many scoring functions which
+happened  in one form during the PLAY and in another during the SHOW.  This
+meant that as we built up the game implementation, we added more structure
+fields than we would have liked.
 
-Adapting MCTS for Cribbage
+Much of our time was spent in automating the game-play; building up from manual,
+to playing a full round, and then a full game.  We found many edge cases that
+required careful manipulation.  As an example, the PLAY ends when neither player
+can make a legal move. But the PLAY can can continue while one of the players
+has legal moves.
+
+Adapting MCTS for Cribbage was challenging due to the player and dealer fields.
+We weren't sure which to keep track of in the algorithm, and were consistently
+getting results worse than the random player, but we have arrived at an
+algorithm that works quite well for Player One.
+
+> Testing
+
+We tested our MCTS algorithm implementation against a random player over the
+course of 50 games.
