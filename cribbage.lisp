@@ -178,11 +178,14 @@
 ;; OUTPUTS: a list of the form  PLR, P1-HAND, P2-HAND, PILE
 
 (defun make-hash-key-from-game (c)
-  (let ((plr (cribbage-whose-turn? c))
-         (p1-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-one*)) #'<))
-         (p2-hand (sort (mapcar #'rank-of (svref (cribbage-plr-hands c) *player-two*)) #'<))
-         (pile (mapcar #'rank-of (cribbage-pile c))))
-    (list plr p1-hand p2-hand pile)))
+  (labels ((hand-of (plr)
+                    ;; try using (mapcar #'rank-of hand) ???
+                    ;; no flush, so only ranks matter
+                    (sort (svref (cribbage-plr-hands c) plr) #'<)))
+    (list (cribbage-whose-turn? c)
+          (hand-of *player-one*)
+          (hand-of *player-two*)
+          (cribbage-pile c))))
 
 
 ;;  COPY-ARRAY

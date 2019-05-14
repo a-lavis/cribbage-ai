@@ -163,8 +163,10 @@
 (defun sim-tree (game tree c)
   (let (;; KEY-MOVE-ACC:  accumulator of KEYs and MOVEs
         (key-move-acc nil)
-        (hashy (mc-tree-hashy tree)))
-    (while (not (game-over? game))
+        (hashy (mc-tree-hashy tree))
+        (curr-move t)
+        (last-move t))
+    (while (and (not (game-over? game)) (or curr-move last-move))
            (let* (;; KEY:  Hash key for current state of game
                   (key (make-hash-key-from-game game))
                   ;; NODEY:  The MC-NODE corresponding to KEY (or NIL if not in tree)
@@ -173,9 +175,12 @@
              (when (null nodey)
                ;; Create new node and insert it into tree
                (setf nodey (insert-new-node game tree key))
+               ;(format t "~%new node: ~A~%" nodey)
                (let* ((mv-index (select-move nodey c (cribbage-whose-dealer? game)))
                       (move-veck (mc-node-veck-moves nodey))
                       (move (svref move-veck mv-index)))
+                 (setf last-move curr-move)
+                 (setf curr-move move)
                  (funcall #'hand-to-pile! game nil move (cribbage-whose-turn? game))
                  (push key key-move-acc)
                  (push mv-index key-move-acc)
@@ -184,9 +189,12 @@
                  (return-from sim-tree (reverse key-move-acc))))
 
              ;; Case 2:  Key already in tree!
+             ;(format t "~%old node: ~A~%" nodey)
              (let* ((mv-index (select-move nodey c (cribbage-whose-dealer? game)))
                     (move-veck (mc-node-veck-moves nodey))
                     (move (svref move-veck mv-index)))
+               (setf last-move curr-move)
+               (setf curr-move move)
                (funcall #'hand-to-pile! game nil move (cribbage-whose-turn? game))
                (push key key-move-acc)
                (push mv-index key-move-acc))))
@@ -256,6 +264,7 @@
 	 ;;(player (whose-turn orig-game))
          )
     (dotimes (i num-sims)
+      (format t "~A, " i)
       ;;(format t " NEW SIM")
       (let* (;; Work with a COPY of the original game struct
              (game (copy-game orig-game))
@@ -264,7 +273,8 @@
 	     ;; Phase 2:  SIM-DEFAULT returns result
              (playout-result (sim-default game)))
 	;; Finally, backup the results
-        (backup hashy key-move-acc playout-result)))
+        (backup hashy key-move-acc playout-result)
+        ))
     ;; Select the best move (using c = 0 because we are not exploring anymore)
     (let* ((rootie (get-root-node tree))
            (mv-index (select-move rootie 0 dlr))
