@@ -98,16 +98,9 @@
 (defun random-do-pile (c)
   ;; check for legal CRIB
   (when (not (= (length (cribbage-crib c)) 4))
-    (return-from random-do-pile nil))
-  ;; generate first random card
-  (let ((card (random-to-pile! c)))
-    ;; CRIB is legal, continue with hand-to-pile! iteration
-    (while (not (null card))
-      ;; call RANDOM-TO-PILE!
-      (setf card (random-to-pile! c))))
-  ;; call SHOW function
-  (when (not (game-over? c))
-    (show c)))
+    (return-from random-do-pile 'error))
+  ;; Put cards in the pile until you can't anymore.
+  (while (random-to-pile! c)))
        
 
 ;; RANDOM-GAME

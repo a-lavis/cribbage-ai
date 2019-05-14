@@ -204,37 +204,11 @@
 ;;    MCTS implementation
 
 (defun sim-default (game)
-  (let ((p1-score-prev (svref (cribbage-score game) *player-one*))
-	(p2-score-prev (svref (cribbage-score game) *player-two*)))
     ;; play out the round
     (random-do-pile game)
     ;; get players' scores
-    (let* ((p1-score (svref (cribbage-score game) *player-one*))
-	   (p2-score (svref (cribbage-score game) *player-two*))
-	   (p1-diff (- p1-score p1-score-prev))
-	   (p2-diff (- p2-score p2-score-prev)))
-      ;; determine who won the round
-      (cond
-       ;; PLAYER-ONE won && NOT the dealer
-       ((and (not (= (cribbage-whose-dealer? game) *player-one*))
-	     (> p1-diff p2-diff))
-	;; return some value  ***********************************
-	10)   
-       ;; PLAYER-ONE won (is the dealer
-       ((and (= (cribbage-whose-dealer? game) *player-one*)
-	     (> p1-diff p2-diff))
-	;; return some value ***********************************
-	5)
-       ;; PLAYER-TWO won && is dealer
-       ((and (= (cribbage-whose-dealer? game) *player-two*)
-	     (> p2-diff p1-diff))
-	;; return some value ***********************************
-	-5)
-       ;; PLAYER-TWO won ** is NOT dealer
-       (t
-	;; return some value ***********************************
-	-10)))))
-   
+    (labels ((score (plr) (svref (cribbage-score game) plr)))
+      (- (score *player-one*) (score *player-two*))))
 
 ;;  BACKUP
 ;; ---------------------------------------------------
