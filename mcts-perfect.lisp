@@ -99,7 +99,7 @@
       ;; No legal moves!
       ((= num-moves 0)
        ;; signal failure
-       nil)
+       0)
       ;; Only one legal move
       ((= num-moves 1)
        ;; return it
@@ -176,7 +176,7 @@
                (let* ((mv-index (select-move nodey c (cribbage-whose-dealer? game)))
                       (move-veck (mc-node-veck-moves nodey))
                       (move (svref move-veck mv-index)))
-                 (apply #'hand-to-pile! game nil move (cribbage-whose-turn? game))
+                 (funcall #'hand-to-pile! game nil move (cribbage-whose-turn? game))
                  (push key key-move-acc)
                  (push mv-index key-move-acc)
                  ;; return the accumulator prepended with selected MOVE
@@ -187,7 +187,7 @@
              (let* ((mv-index (select-move nodey c (cribbage-whose-dealer? game)))
                     (move-veck (mc-node-veck-moves nodey))
                     (move (svref move-veck mv-index)))
-               (apply #'hand-to-pile! game nil move (cribbage-whose-turn? game))
+               (funcall #'hand-to-pile! game nil move (cribbage-whose-turn? game))
                (push key key-move-acc)
                (push mv-index key-move-acc))))
 

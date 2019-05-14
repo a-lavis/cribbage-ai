@@ -17,7 +17,7 @@
         "deal"
         "play"
         "show"
-	      "game"
+	"game"
         "mcts-perfect"
         ))
 
