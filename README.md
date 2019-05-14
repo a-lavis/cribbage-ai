@@ -11,7 +11,7 @@ preferred by beginners.  There are 6-card versions, as well as 3-player and
 
 We have refactored the Monte Carlo Tree Search algorithm to work with our
 implementation of Cribbage. We will compare the performance of a perfect
-information version, an imperfect information version, and a random player. 
+information version, an imperfect information version, and a random player.
 
 ## The Game
 
@@ -84,3 +84,16 @@ Option 3: Manual game play (functions explained in order of calling)
     - calls the scoring functions for the SHOW
     - NON-DEALER's hand is evaluated first, then DEALER, then CRIB
       - CRIB scoring is added to DEALER's points for the round
+
+Note: we have specialized round and game functions which wrap the above
+functions.
+
+For example, ```(pr-round c)``` wraps the function call ```(play-round
+#'random-to-pile! #'pi-mcts-to-pile! #'random-to-crib! #'random-to-pile!)```
+
+### The Process
+
+## Implementing Cribbage
+
+
+## Adapting MCTS for Cribbage
