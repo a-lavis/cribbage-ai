@@ -202,7 +202,7 @@
   (let ((r (avg-random-wins times))
         (p1 (avg-mcts-p1-wins times))
         (p2 (avg-mcts-p2-wins times)))
-    (format t "random: ~A/50~%p1: ~A/50~%p2: ~A/50~%" r p1 p2)))
+    (format t "random: ~A~%p1: ~A~%p2: ~A~%" r p1 p2)))
 
 (defun avg-random-wins (times)
   (let ((x 0))
