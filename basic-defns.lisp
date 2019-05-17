@@ -2,31 +2,25 @@
 ;; AUTHORS: Daniel Melody & Aidan Lavis
 ;; ==========================================
 
-;; Ensure efficient tail-recursion handling
-(setq compiler:tail-call-self-merge-switch t)
-(setq compiler:tail-call-non-self-merge-switch t)
-
-;; avoid garbage-collection messages
-(setf *global-gc-behavior* :auto)
+;; Seems to be a useless file for Atom environment
 
 ;; list of files for CRIBBAGE implementation:
 (defparameter *cribbage-files*
-  (list "basic-defns"
-        "cards"
-        "cribbage"
-        "deal"
-        "play"
-        "show"
-       	"game"
-        "mcts-perfect"
-        ))
+  (list "basic-defns.fasl"
+        "cards.fasl"
+        "cribbage.fasl"
+        "deal.fasl"
+        "play.fasl"
+        "show.fasl"
+        "mcts-perfect.fasl"
+        "game.fasl"))
 
 
 ;; MAKER
 ;; ------------------------------------------
-;; Compiles and loads all files for Cribbage implementation
+;; Loads all FASL files for Cribbage implementation
 
 (defun maker ()
   (dolist (file *cribbage-files*)
-          (compile-file file)
+          (format t "getting here ~A~%" file)
           (load file)))
