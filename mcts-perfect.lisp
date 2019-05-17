@@ -175,7 +175,7 @@
         (hashy (mc-tree-hashy tree))
         (curr-move t)
         (last-move t))
-    (loop while (and (not (game-over? game)) (or curr-move last-move))
+    (loop while (and (not (game-over? game)) (or curr-move last-move)) do
       (let* (;; KEY:  Hash key for current state of game
              (key (make-hash-key-from-game game))
              ;; NODEY:  The MC-NODE corresponding to KEY (or NIL if not in tree)
@@ -238,7 +238,7 @@
 ;;  SIDE EFFECT:  Updates the relevant nodes in the MC-TREE/HASHY
 
 (defun backup (hashy key-move-acc result)
-  (loop while key-move-acc
+  (loop while key-move-acc do
     (let* ((key (pop key-move-acc))
            (nodey (gethash key hashy))
            (mv-index (pop key-move-acc))
@@ -270,17 +270,17 @@
   ;; That way, can reset game struct before each simulation...
   (let* ((tree (new-mc-tree orig-game))
          (hashy (mc-tree-hashy tree))
-       	 (plr (cribbage-whose-turn? orig-game))
-       	 ;;(player (whose-turn orig-game))
+         (plr (cribbage-whose-turn? orig-game))
+         ;;(player (whose-turn orig-game))
          )
     (dotimes (i num-sims)
              (let* (;; Work with a COPY of the original game struct
                     (game (copy-game orig-game))
-              	     ;; Phase 1:  SIM-TREE Destructively modifies game
+                    ;; Phase 1:  SIM-TREE Destructively modifies game
                     (key-move-acc (sim-tree game tree c))
-              	     ;; Phase 2:  SIM-DEFAULT returns result
+                    ;; Phase 2:  SIM-DEFAULT returns result
                     (playout-result (sim-default game)))
-              	;; Finally, backup the results
+               ;; Finally, backup the results
                (backup hashy key-move-acc playout-result)
                ))
     ;; Select the best move (using c = 0 because we are not exploring anymore)
