@@ -141,7 +141,8 @@
                       ;; When C > 0, update score using UGLY term
                       (when (> c 0)
                         (let ((ugly-term (* c (sqrt (/ (log n)
-                                                       (svref move-visits i))))))
+                                                       (svref move-visits i))))
+                                         ))
                           (if (eq player plr)
                             (incf score ugly-term)
                             (decf score ugly-term))))
@@ -261,7 +262,8 @@
 ;;  OUTPUT:  Best move from that state determined by
 ;;             doing *NUM-SIMS* simulations of MCTS.
 
-(defparameter *verbose* t) ;; a global parameter used to ensure/suppress printing of stats
+;; a global parameter used to ensure/suppress printing of stats
+(defparameter *verbose* t)
 
 (defun uct-search (orig-game num-sims c)
   ;; Want to use COPY of GAME struct for simulations...
