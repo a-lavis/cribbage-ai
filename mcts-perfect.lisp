@@ -175,7 +175,7 @@
         (hashy (mc-tree-hashy tree))
         (curr-move t)
         (last-move t))
-    (while (and (not (game-over? game)) (or curr-move last-move))
+    (loop while (and (not (game-over? game)) (or curr-move last-move))
       (let* (;; KEY:  Hash key for current state of game
              (key (make-hash-key-from-game game))
              ;; NODEY:  The MC-NODE corresponding to KEY (or NIL if not in tree)
@@ -238,7 +238,7 @@
 ;;  SIDE EFFECT:  Updates the relevant nodes in the MC-TREE/HASHY
 
 (defun backup (hashy key-move-acc result)
-  (while key-move-acc
+  (loop while key-move-acc
     (let* ((key (pop key-move-acc))
            (nodey (gethash key hashy))
            (mv-index (pop key-move-acc))

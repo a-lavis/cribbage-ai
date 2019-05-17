@@ -44,7 +44,7 @@
           (setf card (funcall p1-pile-fn c))))
 
        ;; the PLAY, call hand-to-pile! as many times as necessary/possible
-       (while (or card last-card)
+       (loop while (or card last-card)
          (setf last-card card)
          (cond
            ;; call P1-PILE-FN
@@ -75,7 +75,7 @@
 (defun play-game (p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn)
   (let ((c (make-cribbage)))
     ;; PLAY-ROUND while NOT GAME-OVER?
-    (while (not (game-over? c))
+    (loop while (not (game-over? c))
       (play-round c p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn))
     ;; return who won this game
     (who-won? c)))
@@ -85,7 +85,7 @@
 (defun play-only-game (p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn)
   (let ((c (make-cribbage)))
     ;; PLAY-ROUND while NOT GAME-OVER?
-    (while (not (game-over? c))
+    (loop while (not (game-over? c))
       (play-only-round c p1-crib-fn p1-pile-fn p2-crib-fn p2-pile-fn))
     ;; return who won this game
     (who-won? c)))
@@ -122,7 +122,7 @@
           (setf card (funcall p1-pile-fn c))))
 
        ;; the PLAY, call hand-to-pile! as many times as necessary/possible
-       (while (or card last-card)
+       (loop while (or card last-card)
          (setf last-card card)
          (cond
            ;; call P1-PILE-FN
@@ -161,7 +161,7 @@
   ;; Put cards in the pile until you can't anymore.
   (let* ((card (random-to-pile! c))
          (last-card card))
-    (while (or card last-card)
+    (loop while (or card last-card)
            (setf last-card card)
            (setf card (random-to-pile! c)))))
 
