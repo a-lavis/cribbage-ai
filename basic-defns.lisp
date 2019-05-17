@@ -2,7 +2,7 @@
 ;; AUTHORS: Daniel Melody & Aidan Lavis
 ;; ==========================================
 
-;; Seems to be a useless file for Atom environment
+;; Use SBCL terminal environment and it works
 
 ;; list of files for CRIBBAGE implementation:
 (defparameter *cribbage-files*
