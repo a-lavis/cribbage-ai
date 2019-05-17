@@ -22,5 +22,4 @@
 
 (defun maker ()
   (dolist (file *cribbage-files*)
-          (format t "getting here ~A~%" file)
           (load file)))
