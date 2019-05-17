@@ -11,20 +11,20 @@
 ;;  diamonds will be 40-52
 
 ;; Constants for suits
-(defconstant *spades* 0)
-(defconstant *clubs* 1)
-(defconstant *hearts* 2)
-(defconstant *diamonds* 3)
+(defparameter *spades* 0)
+(defparameter *clubs* 1)
+(defparameter *hearts* 2)
+(defparameter *diamonds* 3)
 ;; the suit vector
-(defconstant *suit-vec* #("S" "C" "H" "D"))
+(defparameter *suit-vec* #("S" "C" "H" "D"))
 
 ;; Constants for special rank
-(defconstant *ace* 1)
-(defconstant *jack* 11)
-(defconstant *queen* 12)
-(defconstant *king* 13)
+(defparameter *ace* 1)
+(defparameter *jack* 11)
+(defparameter *queen* 12)
+(defparameter *king* 13)
 ;; the rank vector
-(defconstant *rank-vec* #("error" "A" "2" "3" "4" "5" "6" "7" "8" "9" "10"
+(defparameter *rank-vec* #("error" "A" "2" "3" "4" "5" "6" "7" "8" "9" "10"
                           "J" "Q" "K"))
 
 ;; MAKE-CARD

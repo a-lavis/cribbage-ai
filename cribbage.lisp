@@ -3,16 +3,16 @@
 ;; ==========================================
 
 ;; the PLAYERS
-(defconstant *player-one* 0)
-(defconstant *player-two* 1)
+(defparameter *player-one* 0)
+(defparameter *player-two* 1)
 
 ;;  WIN-LOSS VALUES
-(defconstant *win-value* 400000)
-(defconstant *loss-value* -400000)
+(defparameter *win-value* 400000)
+(defparameter *loss-value* -400000)
 
 ;;  NEGATIVE and POSITIVE INFINITY
-(defconstant *neg-inf* -10000000)
-(defconstant *pos-inf*  10000000)
+(defparameter *neg-inf* -10000000)
+(defparameter *pos-inf*  10000000)
 
 
 ;; CRIBBAGE struct
