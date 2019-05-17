@@ -125,7 +125,7 @@
   (let* ((crib (random-crib c)))
     ;; put the 2 cards into CRIB
     (hand-to-crib! c nil (first crib) (second crib)
-      (cribbage-whose-turn? c))))
+                   (cribbage-whose-turn? c))))
 
 ;; ============================================================
 

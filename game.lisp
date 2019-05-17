@@ -45,23 +45,23 @@
 
        ;; the PLAY, call hand-to-pile! as many times as necessary/possible
        (while (or card last-card)
-              (setf last-card card)
-              (cond
-                ;; call P1-PILE-FN
-                ((= (cribbage-whose-turn? c) *player-one*)
-                 (setf card (funcall p1-pile-fn c)))
-                ;; call P2-PILE-FN
-                ((= (cribbage-whose-turn? c) *player-two*)
-                 (setf card (funcall p2-pile-fn c)))
-                ;; default, assign CARD to NIL to ward off infinite loop
-                (t
-                  (setf card nil))))
+         (setf last-card card)
+         (cond
+           ;; call P1-PILE-FN
+           ((= (cribbage-whose-turn? c) *player-one*)
+            (setf card (funcall p1-pile-fn c)))
+           ;; call P2-PILE-FN
+           ((= (cribbage-whose-turn? c) *player-two*)
+            (setf card (funcall p2-pile-fn c)))
+           ;; default, assign CARD to NIL to ward off infinite loop
+           (t
+            (setf card nil))))
 
        ;; call SHOW on Cribbage game
        (when (not (game-over? c))
          (show c))))
     (t
-      (format t "Unable to play a round.~%"))))
+     (format t "Unable to play a round.~%"))))
 
 
 ;; PLAY-GAME
@@ -123,20 +123,20 @@
 
        ;; the PLAY, call hand-to-pile! as many times as necessary/possible
        (while (or card last-card)
-              (setf last-card card)
-              (cond
-                ;; call P1-PILE-FN
-                ((= (cribbage-whose-turn? c) *player-one*)
-                 (setf card (funcall p1-pile-fn c)))
-                ;; call P2-PILE-FN
-                ((= (cribbage-whose-turn? c) *player-two*)
-                 (setf card (funcall p2-pile-fn c)))
-                ;; default, assign CARD to NIL to ward off infinite loop
-                (t
-                  (setf card nil))))
+         (setf last-card card)
+         (cond
+           ;; call P1-PILE-FN
+           ((= (cribbage-whose-turn? c) *player-one*)
+            (setf card (funcall p1-pile-fn c)))
+           ;; call P2-PILE-FN
+           ((= (cribbage-whose-turn? c) *player-two*)
+            (setf card (funcall p2-pile-fn c)))
+           ;; default, assign CARD to NIL to ward off infinite loop
+           (t
+            (setf card nil))))
        ))
     (t
-      (format t "Unable to play a round.~%"))))
+     (format t "Unable to play a round.~%"))))
 
 ;; RANDOM-ROUND
 ;; ------------------------------------------
@@ -164,8 +164,8 @@
     (while (or card last-card)
            (setf last-card card)
            (setf card (random-to-pile! c)))))
-         
-       
+
+
 
 ;; RANDOM-GAME
 ;; ------------------------------------------
@@ -174,7 +174,7 @@
 
 (defun random-game ()
   (play-game #'random-to-crib! #'random-to-pile!
-    #'random-to-crib! #'random-to-pile!))
+             #'random-to-crib! #'random-to-pile!))
 
 
 ;; PI-MCTS-TO-PILE!
@@ -207,20 +207,20 @@
 (defun avg-random-wins (times)
   (let ((x 0))
     (dotimes (i times)
-      (incf x (play-only-game #'random-to-crib! #'random-to-pile!
-                              #'random-to-crib! #'random-to-pile!)))
+             (incf x (play-only-game #'random-to-crib! #'random-to-pile!
+                                     #'random-to-crib! #'random-to-pile!)))
     (- x times)))
 
 (defun avg-mcts-p1-wins (times)
   (let ((x 0))
     (dotimes (i times)
-      (incf x (play-only-game #'random-to-crib! #'pi-mcts-to-pile!
-                              #'random-to-crib! #'random-to-pile!)))
+             (incf x (play-only-game #'random-to-crib! #'pi-mcts-to-pile!
+                                     #'random-to-crib! #'random-to-pile!)))
     (- times (- x times))))
 
 (defun avg-mcts-p2-wins (times)
   (let ((x 0))
     (dotimes (i times)
-      (incf x (play-only-game #'random-to-crib! #'random-to-pile!
-                              #'random-to-crib! #'pi-mcts-to-pile!)))
+             (incf x (play-only-game #'random-to-crib! #'random-to-pile!
+                                     #'random-to-crib! #'pi-mcts-to-pile!)))
     (- x times)))

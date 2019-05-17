@@ -17,7 +17,7 @@
         "deal"
         "play"
         "show"
-	"game"
+       	"game"
         "mcts-perfect"
         ))
 
@@ -28,5 +28,5 @@
 
 (defun maker ()
   (dolist (file *cribbage-files*)
-    (compile-file file)
-    (load file)))
+          (compile-file file)
+          (load file)))

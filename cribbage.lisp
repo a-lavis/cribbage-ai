@@ -50,9 +50,9 @@
   (format str "Dealer: ~A   " (+ (cribbage-whose-dealer? c) 1))
   (format str "Turn: ~A~%" (+ (cribbage-whose-turn? c) 1))
   (format str "Player-One-Hand: ~A     "
-    (mapcar #'card->string (svref (cribbage-plr-hands c) *player-one*)))
+          (mapcar #'card->string (svref (cribbage-plr-hands c) *player-one*)))
   (format str "Player-Two-Hand: ~A~%"
-    (mapcar #'card->string (svref (cribbage-plr-hands c) *player-two*)))
+          (mapcar #'card->string (svref (cribbage-plr-hands c) *player-two*)))
   ;; CUT is initialized as NIL, CARD->STRING doesn't like that
   (when (cribbage-cut c)
     (format str "Cut: ~A   " (card->string (cribbage-cut c))))
@@ -102,12 +102,12 @@
 
 (defun legal-crib? (plr-hand crib card)
   (and
-    ;; PLR-HAND length > 3
-    (> (length plr-hand) 3)
-    ;; CARD is in PLR-HAND
-    (member card plr-hand)
-    ;; CRIB length < 4
-    (< (length crib) 4)))
+   ;; PLR-HAND length > 3
+   (> (length plr-hand) 3)
+   ;; CARD is in PLR-HAND
+   (member card plr-hand)
+   ;; CRIB length < 4
+   (< (length crib) 4)))
 
 
 ;; LEGAL-PLAY?
@@ -119,10 +119,10 @@
 
 (defun legal-play? (plr-hand pile card)
   (and
-    ;; CARD is in PLR-HAND
-    (member card plr-hand)
-    ;; sum of PILE would be <= 31
-    (<= (+ (card-value card) (pile-sum pile)) 31)))
+   ;; CARD is in PLR-HAND
+   (member card plr-hand)
+   ;; sum of PILE would be <= 31
+   (<= (+ (card-value card) (pile-sum pile)) 31)))
 
 ;; GAME-OVER?
 ;; ------------------------------------------
@@ -146,9 +146,9 @@
   ;; return who won when game is over
   (when (game-over? c)
     (let* ((p1-score (svref (cribbage-score c) *player-one*))
-	   (p2-score (svref (cribbage-score c) *player-two*))
-	   (max-score (max p1-score p2-score))
-	   (winning-plr (position max-score (cribbage-score c))))
+       	   (p2-score (svref (cribbage-score c) *player-two*))
+       	   (max-score (max p1-score p2-score))
+       	   (winning-plr (position max-score (cribbage-score c))))
       (return-from who-won? (+ 1 winning-plr))))
     ;; otherwise, say that game is NOT over
     (format t "Keep playing! It ain't over 'til it's over.~%"))
@@ -182,10 +182,10 @@
                     ;; try using (mapcar #'rank-of hand) ???
                     ;; no flush, so only ranks matter
                     (sort (svref (cribbage-plr-hands c) plr) #'<)))
-    (list (cribbage-whose-turn? c)
-          (hand-of *player-one*)
-          (hand-of *player-two*)
-          (cribbage-pile c))))
+          (list (cribbage-whose-turn? c)
+                (hand-of *player-one*)
+                (hand-of *player-two*)
+                (cribbage-pile c))))
 
 
 ;;  COPY-ARRAY
@@ -195,7 +195,7 @@
 
 (defun copy-array (harry)
   (let* ((dims (array-dimensions harry))
-	 (kopy (make-array dims)))
+       	 (kopy (make-array dims)))
     (dotimes (c (first dims))
 	(setf (aref kopy c) (aref harry c)))
   kopy))

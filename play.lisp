@@ -50,10 +50,10 @@
          (num-moves 0))
     ;; iterate through PLR-HAND to generate possible moves))
     (dolist (card plr-hand)
-      ;; when CARD is LEGAL-PLAY? add to MOVES and increment NUM-moves
-      (when (legal-play? plr-hand pile card)
-	(setf moves (cons card moves))
-        (incf num-moves)))
+            ;; when CARD is LEGAL-PLAY? add to MOVES and increment NUM-moves
+            (when (legal-play? plr-hand pile card)
+             	(setf moves (cons card moves))
+              (incf num-moves)))
     ;; make array of legal moves when NUM-MOVES > 0
     (if (> num-moves 0)
       ;; make the array
@@ -72,8 +72,8 @@
   (let* ((cards (legal-pile c)))
     ;; check if CARDS is empty
     (if (null cards)
-	;; CARDS is empty, pass on the NIL
-	nil
+     	;; CARDS is empty, pass on the NIL
+     	nil
       ;; otherwise, select random index from CARDS vector
       (svref cards (random (length cards))))))
 
@@ -89,7 +89,7 @@
   (let ((card (random-pile c)))
     ;; check if CARD is NIL
     (when (and (not (game-over? c))
-              (not (null card)))
+               (not (null card)))
       ;; put the CARD on the pile
       (hand-to-pile! c nil card (cribbage-whose-turn? c)))))
 
@@ -104,11 +104,11 @@
   (let* ((pile (cribbage-pile c)))
     ;; accumulate all possible scoring opportunities
     (+
-      (his-nobs pile (suit-of (cribbage-cut c)))
-      (fifteen (pile-sum pile))
-      (thirty-one (pile-sum pile))
-      (n-of-a-kind pile)
-      (run pile))))
+     (his-nobs pile (suit-of (cribbage-cut c)))
+     (fifteen (pile-sum pile))
+     (thirty-one (pile-sum pile))
+     (n-of-a-kind pile)
+     (run pile))))
 
 
 ;; HIS-NOBS
@@ -121,12 +121,12 @@
 (defun his-nobs (pile cut-suit)
   ;; get TOP-CARD
   (let ((top-card (first pile)))
-  ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
-  (when (and (equal (length pile) 1)
-             (equal (suit-of top-card) cut-suit))
-    ;(format t "His-Nobs!~%")
-    ;; return value of this scoring opportunity
-    (return-from his-nobs 1)))
+    ;; if TOP-CARD == CUT-SUIT  && length(pile) == 1
+    (when (and (equal (length pile) 1)
+               (equal (suit-of top-card) cut-suit))
+      ;(format t "His-Nobs!~%")
+      ;; return value of this scoring opportunity
+      (return-from his-nobs 1)))
   ;; otherwise return 0
   0)
 
@@ -167,17 +167,17 @@
 (defun n-of-a-kind (pile)
   (cond
     ;; score a QUADRUPLE
-   ((quadruple? pile)
-    ;(format t "Four-of-a-Kind!~%")
-    12)
+    ((quadruple? pile)
+     ;(format t "Four-of-a-Kind!~%")
+     12)
     ;; score a TRIPLE
-   ((triple? pile)
-    ;(format t "Triple!~%")
-    6)
+    ((triple? pile)
+     ;(format t "Triple!~%")
+     6)
     ;; score a PAIR
-   ((pair? pile)
-    ;(format t "Pair!~%")
-    2)
+    ((pair? pile)
+     ;(format t "Pair!~%")
+     2)
     ;; else 0
     (t 0)))
 
@@ -229,7 +229,7 @@
 ;;    rank (can be out of order)
 
 (defun run (pile)
-;; get sorted lists of max length 3,4,5
+  ;; get sorted lists of max length 3,4,5
   (let* ((potential-five (subseq pile 0 (min (length pile) 5)))
          (potential-four (subseq pile 0 (min (length pile) 4)))
          (potential-three (subseq pile 0 (min (length pile) 3)))
@@ -246,12 +246,12 @@
       ((and (succession? sorted-four)
             (equal (length sorted-four) 4))
        ;(format t "Run of 4!~%")
-        4)
+       4)
       ;; a RUN of 3
       ((and (succession? sorted-three)
             (equal (length sorted-three) 3))
        ;(format t "Run of 3!~%")
-        3)
+       3)
       ;; no RUN
       (t 0))))
 
