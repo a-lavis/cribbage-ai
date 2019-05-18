@@ -180,7 +180,7 @@
 ;; PI-MCTS-TO-PILE!
 
 (defun pi-mcts-to-pile! (c)
-  (hand-to-pile! c nil (uct-search c 100 2) (cribbage-whose-turn? c)))
+  (hand-to-pile! c nil (uct-search c 50 2) (cribbage-whose-turn? c)))
 
 
 ;; PR-ROUND
