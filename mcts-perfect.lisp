@@ -97,7 +97,7 @@
 ;;         C, an exploitation-exploration constant
 ;; OUTPUT: The INDEX of the selected move into the moves vector
 
-(defun select-move (nodey c plr)
+(defun select-move (nodey c)
   (let* ((player (mc-node-whose-turn nodey))
          (moves (mc-node-veck-moves nodey))
          (num-moves (length moves)))
@@ -121,7 +121,7 @@
              (move-visits (mc-node-veck-visits nodey))
              (move-scores (mc-node-veck-scores nodey))
              (best-move-so-far nil)
-             (best-score-so-far (if (eq player plr)
+             (best-score-so-far (if (eq player *player-one*)
                                   *neg-inf*
                                   *pos-inf*)))
          (dotimes (i num-moves)
@@ -141,13 +141,13 @@
                         (let ((ugly-term (* c (sqrt (/ (log n)
                                                        (svref move-visits i))))
                                          ))
-                          (if (eq player plr)
+                          (if (eq player *player-one*)
                             (incf score ugly-term)
                             (decf score ugly-term))))
                       ;; When SCORE is better than best-score-so-far...
-                      (when (or (and (eq player plr)
+                      (when (or (and (eq player *player-one*)
                                      (> score best-score-so-far))
-                                (and (eq player (switch plr))
+                                (and (eq player *player-two*)
                                      (< score best-score-so-far)))
                         ;; Update best-score/move-so-far
                         (setf best-score-so-far score)
@@ -183,7 +183,7 @@
           ;; Create new node and insert it into tree
           (setf nodey (insert-new-node game tree key))
           ;(format t "~%new node: ~A~%" nodey)
-          (let* ((mv-index (select-move nodey c (cribbage-whose-turn? game)))
+          (let* ((mv-index (select-move nodey c))
                  (move-veck (mc-node-veck-moves nodey))
                  (move (svref move-veck mv-index)))
             (setf last-move curr-move)
@@ -197,7 +197,7 @@
 
         ;; Case 2:  Key already in tree!
         ;(format t "~%old node: ~A~%" nodey)
-        (let* ((mv-index (select-move nodey c (cribbage-whose-turn? game)))
+        (let* ((mv-index (select-move nodey c))
                (move-veck (mc-node-veck-moves nodey))
                (move (svref move-veck mv-index)))
           (setf last-move curr-move)
@@ -283,7 +283,7 @@
                ))
     ;; Select the best move (using c = 0 because we are not exploring anymore)
     (let* ((rootie (get-root-node tree))
-           (mv-index (select-move rootie 0 plr))
+           (mv-index (select-move rootie 0))
            (move (svref (mc-node-veck-moves rootie) mv-index))
            (scores (mc-node-veck-scores rootie))
            (score (svref scores mv-index)))
