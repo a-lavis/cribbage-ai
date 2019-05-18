@@ -189,6 +189,12 @@
   (play-round c #'random-to-crib! #'pi-mcts-to-pile!
               #'random-to-crib! #'random-to-pile!))
 
+;; PR-ONLY-ROUND
+
+(defun pr-only-round (c)
+  (play-only-round c #'random-to-crib! #'pi-mcts-to-pile!
+                   #'random-to-crib! #'random-to-pile!))
+
 
 ;; PI-VS-RANDOM
 
