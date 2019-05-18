@@ -101,8 +101,6 @@
   (let* ((player (mc-node-whose-turn nodey))
          (moves (mc-node-veck-moves nodey))
          (num-moves (length moves)))
-    (format t "player: ~A~%" player)
-    (format t "plr: ~A~%" plr)
     (cond
       ;; No legal moves!
       ((= num-moves 0)
